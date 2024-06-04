@@ -28,8 +28,8 @@ namespace Checkr.Services.Context
                 .UsingEntity(j => j.ToTable("UserBoards"));
 
             modelBuilder.Entity<Box>()
-                .HasMany(u => u.Labels)
-                .WithMany(b => b.Boxes)
+                .HasMany(b => b.Labels)
+                .WithMany(l => l.Boxes)
                 .UsingEntity(j => j.ToTable("BoxLabels"));
         }
     }
