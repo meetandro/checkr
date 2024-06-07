@@ -1,33 +1,55 @@
-﻿using Checkr.Entities;
+﻿
+using Checkr.Entities;
 using Checkr.Repositories.Abstract;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Checkr.Repositories.Concrete
 {
     public class MessageRepository : IMessageRepository
     {
+        private readonly ApplicationDbContext _context;
+
+        public MessageRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public List<Message> GetAllMessages()
         {
-            throw new NotImplementedException();
+            return _context.Messages.ToList();
         }
 
         public Message GetMessageById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Messages.Find(id);
         }
 
         public Message AddMessage(Message message)
         {
-            throw new NotImplementedException();
+            _context.Messages.Add(message);
+            _context.SaveChanges();
+            return message;
         }
 
         public Message UpdateMessage(Message message)
         {
-            throw new NotImplementedException();
+            _context.Messages.Update(message);
+            _context.SaveChanges();
+            return message;
         }
 
         public Message DeleteMessage(int id)
         {
-            throw new NotImplementedException();
+            var message = _context.Messages.Find(id);
+            if (message != null)
+            {
+                _context.Messages.Remove(message);
+                _context.SaveChanges();
+            }
+            return message;
         }
     }
 }
+
