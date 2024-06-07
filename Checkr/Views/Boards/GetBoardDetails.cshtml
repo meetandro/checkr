@@ -1,0 +1,27 @@
+﻿@model Board
+@{
+}
+
+<h1>@Model.BoardName</h1>
+
+<div class="container">
+    <div class="row">
+        @if (Model.Boxes.Count > 0)
+        {
+            @foreach (var box in Model.Boxes)
+            {
+                <partial name="/Views/Boxes/_GetBoxDetails.cshtml" model="box" />
+            }
+        }
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body d-flex justify-content-center align-items-center">
+                    <form asp-controller="Boxes" asp-action="AddBoxToBoard" method="get">
+                        <input type="hidden" name="BoardId" value="@Model.Id">
+                        <button type="submit" class="lead fw-bold btn btn-link text-decoration-none">Add Box</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

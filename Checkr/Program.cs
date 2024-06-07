@@ -1,4 +1,6 @@
 using Checkr.Entities;
+using Checkr.Repositories.Abstract;
+using Checkr.Repositories.Concrete;
 using Checkr.Services.Abstract;
 using Checkr.Services.Concrete;
 using Checkr.Services.Context;
@@ -8,6 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var services = builder.Services;
+
+services.AddScoped<IBoardRepository, BoardRepository>();
+services.AddScoped<IBoxRepository, BoxRepository>();
+services.AddScoped<ICardRepository, CardRepository>();
+services.AddScoped<ILabelRepository, LabelRepository>();
+services.AddScoped<IMessageRepository, MessageRepository>();
+services.AddScoped<IToDoItemRepository, ToDoItemRepository>();
+
+services.AddScoped<IBoardService, BoardService>();
+services.AddScoped<IBoxService, BoxService>();
+services.AddScoped<ICardService, CardService>();
+services.AddScoped<IToDoItemService, ToDoItemService>();
 
 services.AddScoped<IFileService, FileService>();
 

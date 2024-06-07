@@ -1,13 +1,16 @@
 ﻿using Checkr.Entities;
+using Checkr.Models;
 
 namespace Checkr.Services.Abstract
 {
     public interface IBoxService
     {
-        Box AddBox(Box box, int boardId);
+        Box GetBoxById(int id);
 
-        Box UpdateBox(int boxId, Box box, int boardId);
+        Box AddBox(BoxDto boxDto);
 
-        Box DeleteBox(int boxId, int boardId);
+        Box UpdateBox(int boxId, BoxDto boxDto);
+
+        Box DeleteBox(int id);
     }
 }

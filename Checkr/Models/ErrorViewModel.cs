@@ -1,4 +1,4 @@
-namespace Checkr.ViewModels
+namespace Checkr.Models
 {
     public class ErrorViewModel
     {

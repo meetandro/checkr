@@ -1,23 +1,30 @@
 ﻿using Checkr.Entities;
+using Checkr.Repositories.Abstract;
 using Checkr.Services.Abstract;
 
 namespace Checkr.Services.Concrete
 {
-    public class ToDoItemService : IToDoItemService
+    public class ToDoItemService(IToDoItemRepository toDoItemRepository) : IToDoItemService
     {
-        public ToDoItem AddToDoItem(ToDoItem toDoItem, int cardId)
+        private readonly IToDoItemRepository _toDoItemRepository = toDoItemRepository;
+
+        public ToDoItem AddToDoItem(ToDoItem toDoItem)
         {
-            throw new NotImplementedException();
+            return _toDoItemRepository.AddToDoItem(toDoItem);
         }
 
-        public ToDoItem UpdateToDoItem(int toDoItemId, ToDoItem toDoItem, int cardId)
+        public ToDoItem UpdateToDoItem(int toDoItemId, ToDoItem toDoItem)
         {
-            throw new NotImplementedException();
+            var toDoItemToUpdate = _toDoItemRepository.GetToDoItemById(toDoItemId);
+
+            toDoItemToUpdate = toDoItem;
+
+            return _toDoItemRepository.UpdateToDoItem(toDoItemToUpdate);
         }
 
-        public ToDoItem DeleteToDoItem(int toDoItemId, int cardId)
+        public ToDoItem DeleteToDoItem(int toDoItemId)
         {
-            throw new NotImplementedException();
+            return _toDoItemRepository.DeleteToDoItem(toDoItemId);
         }
     }
 }

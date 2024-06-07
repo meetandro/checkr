@@ -4,10 +4,10 @@ namespace Checkr.Services.Abstract
 {
     public interface ICardService
     {
-        Card AddCard(Card card, int boxId);
+        Card AddCard(Card card);
 
-        Card UpdateCard(int cardId, Card card, int boxId);
+        Card UpdateCard(int cardId, Card card);
 
-        Card DeleteCard(int cardId, int boxId);
+        Card DeleteCard(int cardId);
     }
 }

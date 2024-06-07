@@ -1,33 +1,50 @@
 ﻿using Checkr.Entities;
 using Checkr.Repositories.Abstract;
+using Checkr.Services.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Checkr.Repositories.Concrete
 {
-    public class CardRepository : ICardRepository
+    public class CardRepository(ApplicationDbContext context) : ICardRepository
     {
+        private readonly ApplicationDbContext _context = context;
+
         public List<Card> GetAllCards()
         {
-            throw new NotImplementedException();
+            var cards = _context.Cards
+                .Include("ToDoItems")
+                .ToList();
+            return cards;
         }
 
         public Card GetCardById(int id)
         {
-            throw new NotImplementedException();
+            var card = _context.Cards
+                .Include("ToDoItems")
+                .FirstOrDefault(c => c.Id == id);
+            return card;
         }
 
         public Card AddCard(Card card)
         {
-            throw new NotImplementedException();
+            _context.Cards.Add(card);
+            _context.SaveChanges();
+            return card;
         }
 
         public Card UpdateCard(Card card)
         {
-            throw new NotImplementedException();
+            _context.Cards.Update(card);
+            _context.SaveChanges();
+            return card;
         }
 
         public Card DeleteCard(int id)
         {
-            throw new NotImplementedException();
+            var card = GetCardById(id);
+            _context.Cards.Remove(card);
+            _context.SaveChanges();
+            return card;
         }
     }
 }

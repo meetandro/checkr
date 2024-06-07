@@ -4,10 +4,10 @@ namespace Checkr.Services.Abstract
 {
     public interface IToDoItemService
     {
-        ToDoItem AddToDoItem(ToDoItem toDoItem, int cardId);
+        ToDoItem AddToDoItem(ToDoItem toDoItem);
 
-        ToDoItem UpdateToDoItem(int toDoItemId, ToDoItem toDoItem, int cardId);
+        ToDoItem UpdateToDoItem(int toDoItemId, ToDoItem toDoItem);
 
-        ToDoItem DeleteToDoItem(int toDoItemId,  int cardId);
+        ToDoItem DeleteToDoItem(int toDoItemId);
     }
 }

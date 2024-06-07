@@ -1,4 +1,4 @@
-using Checkr.ViewModels;
+using Checkr.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

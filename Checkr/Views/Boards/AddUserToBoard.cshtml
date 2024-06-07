@@ -1,0 +1,13 @@
+﻿@{
+}
+
+<h1>Add User to Board</h1>
+
+<form asp-controller="Boards" asp-action="AddUserToBoard" method="post">
+    <div class="form-group">
+        <label for="UserName">User Name</label>
+        <input type="text" id="UserName" name="userName" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Member</button>
+</form>

@@ -4,7 +4,7 @@ namespace Checkr.Repositories.Abstract
 {
     public interface IBoardRepository
     {
-        List<Board> GetAllBoards();
+        List<Board> GetAllBoardsForUser(string userId);
 
         Board GetBoardById(int id);
 

@@ -1,33 +1,52 @@
 ﻿using Checkr.Entities;
 using Checkr.Repositories.Abstract;
+using Checkr.Services.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Checkr.Repositories.Concrete
 {
-    public class BoxRepository : IBoxRepository
+    public class BoxRepository(ApplicationDbContext context) : IBoxRepository
     {
+        private readonly ApplicationDbContext _context = context;
+
         public List<Box> GetAllBoxes()
         {
-            throw new NotImplementedException();
+            var boxes = _context.Boxes
+                .Include("Labels")
+                .Include("Cards")
+                .ToList();
+            return boxes;
         }
 
         public Box GetBoxById(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Box UpdateBox(Box box)
-        {
-            throw new NotImplementedException();
+            var box = _context.Boxes
+                .Include("Labels")
+                .Include("Cards")
+                .FirstOrDefault(b => b.Id == id);
+            return box;
         }
 
         public Box AddBox(Box box)
         {
-            throw new NotImplementedException();
+            _context.Boxes.Add(box);
+            _context.SaveChanges();
+            return box;
+        }
+
+        public Box UpdateBox(Box box)
+        {
+            _context.Boxes.Update(box);
+            _context.SaveChanges();
+            return box;
         }
 
         public Box DeleteBox(int id)
         {
-            throw new NotImplementedException();
+            var box = GetBoxById(id);
+            _context.Boxes.Remove(box);
+            _context.SaveChanges();
+            return box;
         }
     }
 }

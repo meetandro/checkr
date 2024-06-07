@@ -1,0 +1,15 @@
+﻿@model BoardDto
+@{
+}
+
+<h1>Update Board</h1>
+
+<form asp-controller="Boards" asp-action="UpdateBoard" method="post">
+    <div class="form-group">
+        <label asp-for="BoardName">Board Name</label>
+        <input value="@Model.BoardName" asp-for="BoardName" class="form-control">
+        <span asp-validation-for="BoardName" class="text-danger"></span>
+    </div>
+    <hr>
+    <button type="submit" class="btn btn-outline-success">Update Board</button>
+</form>

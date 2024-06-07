@@ -1,13 +1,22 @@
 ﻿using Checkr.Entities;
+using Checkr.Models;
 
 namespace Checkr.Services.Abstract
 {
     public interface IBoardService
     {
-        Board AddBoard(Board board, string userId);
+        List<Board> GetAllBoardsForUser(string userId);
 
-        Board UpdateBoard(int boardId, Board board, string userId);
+        Board GetBoardById(int id);
 
-        Board DeleteBoard(int boardId, string userId);
+        Board AddBoard(BoardDto boardDto);
+
+        Board AddUserToBoard(int boardId, string userName);
+
+        Board RemoveUserFromBoard(int boardId, string userId);
+
+        Board UpdateBoard(int boardId, BoardDto boardDto);
+
+        Board DeleteBoard(int id);
     }
 }

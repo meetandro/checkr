@@ -1,0 +1,15 @@
+﻿@model BoxDto
+@{
+}
+
+<h1>Add Box</h1>
+
+<form asp-controller="Boxes" asp-action="AddBoxToBoard" method="post">
+    <div class="form-group">
+        <input type="hidden" asp-for="BoardId" value="@ViewData["BoardId"]" />
+        <label asp-for="BoxName">Box Name</label>
+        <input asp-for="BoxName" class="form-control" />
+        <span asp-validation-for="BoxName" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Box</button>
+</form>

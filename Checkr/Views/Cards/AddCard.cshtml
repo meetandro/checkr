@@ -1,0 +1,27 @@
+﻿@model Card
+@{
+}
+
+<h1>Add Card</h1>
+
+<form asp-controller="Cards" asp-action="AddCard" method="post">
+    <input type="hidden" asp-for="BoxId" value="@ViewData["BoxId"]" />
+    <div class="form-group">
+        <input type="hidden" asp-for="BoxId" value="@ViewData["BoxId"]" />
+        <label asp-for="CardName">Card Name</label>
+        <input asp-for="CardName" class="form-control" />
+        <span asp-validation-for="CardName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CardContent">Card Content</label>
+        <textarea asp-for="CardContent" class="form-control"></textarea>
+        <span asp-validation-for="CardContent" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DueDate">Due Date</label>
+        <input type="date" asp-for="DueDate" class="form-control" />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Card</button>
+</form>
+
