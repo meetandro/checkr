@@ -2,15 +2,15 @@
 
 namespace Checkr.Entities
 {
-    public class Label
+    public class Tag
     {
         public int Id { get; set; }
 
         [Required]
-        public string LabelName { get; set; } = "";
+        public string TagName { get; set; } = "";
 
         [Required]
-        public string LabelHex { get; set; } = "";
+        public string TagHex { get; set; } = "";
 
         // Collections
 

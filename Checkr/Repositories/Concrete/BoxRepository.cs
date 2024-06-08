@@ -12,8 +12,8 @@ namespace Checkr.Repositories.Concrete
         public List<Box> GetAllBoxes()
         {
             var boxes = _context.Boxes
-                .Include("Labels")
-                .Include("Cards")
+                .Include(b => b.Tags)
+                .Include(b => b.Cards)
                 .ToList();
             return boxes;
         }
@@ -21,8 +21,8 @@ namespace Checkr.Repositories.Concrete
         public Box GetBoxById(int id)
         {
             var box = _context.Boxes
-                .Include("Labels")
-                .Include("Cards")
+                .Include(b => b.Tags)
+                .Include(b => b.Cards)
                 .FirstOrDefault(b => b.Id == id);
             return box;
         }

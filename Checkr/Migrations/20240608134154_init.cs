@@ -67,17 +67,17 @@ namespace Checkr.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Labels",
+                name: "Tags",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LabelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LabelHex = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    TagName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TagHex = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Labels", x => x.Id);
+                    table.PrimaryKey("PK_Tags", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -259,25 +259,25 @@ namespace Checkr.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BoxLabels",
+                name: "BoxTags",
                 columns: table => new
                 {
                     BoxesId = table.Column<int>(type: "int", nullable: false),
-                    LabelsId = table.Column<int>(type: "int", nullable: false)
+                    TagsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BoxLabels", x => new { x.BoxesId, x.LabelsId });
+                    table.PrimaryKey("PK_BoxTags", x => new { x.BoxesId, x.TagsId });
                     table.ForeignKey(
-                        name: "FK_BoxLabels_Boxes_BoxesId",
+                        name: "FK_BoxTags_Boxes_BoxesId",
                         column: x => x.BoxesId,
                         principalTable: "Boxes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BoxLabels_Labels_LabelsId",
-                        column: x => x.LabelsId,
-                        principalTable: "Labels",
+                        name: "FK_BoxTags_Tags_TagsId",
+                        column: x => x.TagsId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -372,9 +372,9 @@ namespace Checkr.Migrations
                 column: "BoardId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BoxLabels_LabelsId",
-                table: "BoxLabels",
-                column: "LabelsId");
+                name: "IX_BoxTags_TagsId",
+                table: "BoxTags",
+                column: "TagsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cards_BoxId",
@@ -421,7 +421,7 @@ namespace Checkr.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BoxLabels");
+                name: "BoxTags");
 
             migrationBuilder.DropTable(
                 name: "Messages");
@@ -436,7 +436,7 @@ namespace Checkr.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Labels");
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Cards");

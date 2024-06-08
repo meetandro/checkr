@@ -14,7 +14,7 @@ var services = builder.Services;
 services.AddScoped<IBoardRepository, BoardRepository>();
 services.AddScoped<IBoxRepository, BoxRepository>();
 services.AddScoped<ICardRepository, CardRepository>();
-services.AddScoped<ILabelRepository, LabelRepository>();
+services.AddScoped<ITagRepository, TagRepository>();
 services.AddScoped<IMessageRepository, MessageRepository>();
 services.AddScoped<IToDoItemRepository, ToDoItemRepository>();
 

@@ -12,7 +12,7 @@ namespace Checkr.Repositories.Concrete
         public List<Card> GetAllCards()
         {
             var cards = _context.Cards
-                .Include("ToDoItems")
+                .Include(c => c.ToDoItems)
                 .ToList();
             return cards;
         }
@@ -20,7 +20,7 @@ namespace Checkr.Repositories.Concrete
         public Card GetCardById(int id)
         {
             var card = _context.Cards
-                .Include("ToDoItems")
+                .Include(c => c.ToDoItems)
                 .FirstOrDefault(c => c.Id == id);
             return card;
         }

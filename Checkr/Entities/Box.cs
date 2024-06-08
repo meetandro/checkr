@@ -15,7 +15,7 @@ namespace Checkr.Entities
 
         // Collections
 
-        public List<Label> Labels { get; set; } = [];
+        public List<Tag> Tags { get; set; } = [];
 
         public List<Card> Cards { get; set; } = [];
     }

@@ -37,19 +37,19 @@ namespace Checkr.Migrations
                     b.ToTable("UserBoards", (string)null);
                 });
 
-            modelBuilder.Entity("BoxLabel", b =>
+            modelBuilder.Entity("BoxTag", b =>
                 {
                     b.Property<int>("BoxesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LabelsId")
+                    b.Property<int>("TagsId")
                         .HasColumnType("int");
 
-                    b.HasKey("BoxesId", "LabelsId");
+                    b.HasKey("BoxesId", "TagsId");
 
-                    b.HasIndex("LabelsId");
+                    b.HasIndex("TagsId");
 
-                    b.ToTable("BoxLabels", (string)null);
+                    b.ToTable("BoxTags", (string)null);
                 });
 
             modelBuilder.Entity("Checkr.Entities.Board", b =>
@@ -131,27 +131,6 @@ namespace Checkr.Migrations
                     b.ToTable("Cards");
                 });
 
-            modelBuilder.Entity("Checkr.Entities.Label", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("LabelHex")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LabelName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Labels");
-                });
-
             modelBuilder.Entity("Checkr.Entities.Message", b =>
                 {
                     b.Property<int>("Id")
@@ -181,6 +160,27 @@ namespace Checkr.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("Checkr.Entities.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("TagHex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TagName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Checkr.Entities.ToDoItem", b =>
@@ -433,7 +433,7 @@ namespace Checkr.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BoxLabel", b =>
+            modelBuilder.Entity("BoxTag", b =>
                 {
                     b.HasOne("Checkr.Entities.Box", null)
                         .WithMany()
@@ -441,9 +441,9 @@ namespace Checkr.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Checkr.Entities.Label", null)
+                    b.HasOne("Checkr.Entities.Tag", null)
                         .WithMany()
-                        .HasForeignKey("LabelsId")
+                        .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

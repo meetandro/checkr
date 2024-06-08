@@ -14,7 +14,7 @@ namespace Checkr.Services.Context
 
         public DbSet<ToDoItem> ToDoItems { get; set; }
 
-        public DbSet<Label> Labels { get; set; }
+        public DbSet<Tag> Tags { get; set; }
 
         public DbSet<Message> Messages { get; set; }
 
@@ -28,9 +28,9 @@ namespace Checkr.Services.Context
                 .UsingEntity(j => j.ToTable("UserBoards"));
 
             modelBuilder.Entity<Box>()
-                .HasMany(b => b.Labels)
+                .HasMany(b => b.Tags)
                 .WithMany(l => l.Boxes)
-                .UsingEntity(j => j.ToTable("BoxLabels"));
+                .UsingEntity(j => j.ToTable("BoxTags"));
         }
     }
 }
