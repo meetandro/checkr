@@ -4,6 +4,8 @@ namespace Checkr.Models
 {
     public class TagDto
     {
+        public int Id { get; set; }  
+
         [Required]
         public string TagName { get; set; } = "";
 

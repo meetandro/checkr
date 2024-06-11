@@ -1,19 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 
 namespace Checkr.Entities
 {
     public class Tag
     {
         public int Id { get; set; }
-
-        [Required]
-        public string TagName { get; set; } = "";
-
-        [Required]
-        public string TagHex { get; set; } = "";
-
-        // Collections
-
-        public List<Box> Boxes { get; set; } = [];
+        public string TagName { get; set; }
+        public string TagHex { get; set; }
+        public ICollection<Box> Boxes { get; set; }
     }
 }
