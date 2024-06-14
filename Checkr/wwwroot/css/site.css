@@ -20,3 +20,33 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+body {
+    background: linear-gradient(to bottom right, #2e2e2e, #292929);
+    color: #d0d0d0;
+    font-family: Arial, sans-serif;
+}
+
+/* Credits: https://codepen.io/ */
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #322a31 #5f585a;
+}
+
+    /* Chrome, Edge, and Safari */
+    *::-webkit-scrollbar {
+        width: 16px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: #5f585a;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: #322a31;
+        border-radius: 10px;
+        border: 3px dotted #ffffff;
+    }

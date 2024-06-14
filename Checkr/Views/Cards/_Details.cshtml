@@ -1,0 +1,46 @@
+﻿@model Card
+
+<div class="card mt-4 mb-4 shadow-sm bg-dark text-light" style="border: none;">
+    <div class="card-body" style="background-color: #2b2b2b;">
+        <h5 class="card-title" style="color: #61afef; margin-bottom: 1rem;">@Model.Name</h5>
+        @if (!string.IsNullOrEmpty(Model.ImageFileName))
+        {
+            <img width="100" class="mb-2" src="/images/@Model.ImageFileName" style="display: block; margin-bottom: 1rem;">
+        }
+        <p class="lead">@Model.Content</p>
+        <div class="d-flex align-items-start">
+            <div class="dropdown me-2">
+                <button class="btn btn-sm btn-outline-secondary" type="button" id="togglePartialViewButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-plus"></i>
+                </button>
+                <div class="p-2 dropdown-menu dropdown-menu-end bg-dark text-light" aria-labelledby="togglePartialViewButton">
+                    @await Html.PartialAsync("/Views/ToDoItems/Create.cshtml", new ToDoItemDto() { CardId = Model.Id })
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" id="cardActionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="cardActionsDropdown">
+                    <li>
+                        <form asp-controller="Cards" asp-action="Update" asp-route-id="@Model.Id" method="get" class="m-0">
+                            <button type="submit" class="dropdown-item">Update Card <i class="bi bi-pencil"></i></button>
+                        </form>
+                    </li>
+                    <li>
+                        <form asp-controller="Cards" asp-action="Delete" asp-route-id="@Model.Id" asp-route-boxId="@Model.BoxId" method="post" onsubmit="return confirm('Confirm?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="dropdown-item text-danger">Delete Card <i class="bi bi-trash"></i></button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="w-100 mt-3">
+            @foreach (var toDoItem in Model.ToDoItems)
+            {
+                @await Html.PartialAsync("/Views/ToDoItems/_Details.cshtml", toDoItem)
+            }
+        </div>
+    </div>
+</div>

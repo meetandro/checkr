@@ -7,13 +7,15 @@ namespace Checkr.Entities
         public int Id { get; set; }
 
         [Required]
-        public string TagName { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
 
         [Required]
-        public string TagHex { get; set; } = "";
+        public string Hex { get; set; } = string.Empty;
 
-        // Collections
+        public int BoardId { get; set; }
 
-        public List<Box> Boxes { get; set; } = [];
+        public Board Board { get; set; } = default!;
+
+        public ICollection<Box> Boxes { get; set; } = [];
     }
 }

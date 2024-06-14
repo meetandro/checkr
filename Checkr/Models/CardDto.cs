@@ -5,17 +5,17 @@ namespace Checkr.Models
     public class CardDto
     {
         [Required]
-        public string CardName { get; set; } = "";
+        public string Name { get; set; } = "";
 
-        public string CardContent { get; set; } = "";
+        public string Content { get; set; } = "";
 
-        public string CardImageFileName { get; set; } = "";
+        public string ImageFileName { get; set; } = "";
+
+        public IFormFile? ImageFile { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
         public DateTime DueDate { get; set; }
-
-        // Foreign Keys
 
         public int BoxId { get; set; }
     }

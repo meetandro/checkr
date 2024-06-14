@@ -5,6 +5,8 @@
 
 <form asp-controller="Boards" asp-action="AddUserToBoard" method="post">
     <div class="form-group">
+        @Html.AntiForgeryToken()
+        <input type="hidden" value="@ViewData["BoardId"]" name="id" />
         <label for="UserName">User Name</label>
         <input type="text" id="UserName" name="userName" class="form-control" required>
     </div>

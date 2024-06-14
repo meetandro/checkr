@@ -1,6 +1,7 @@
 ﻿using Checkr.Entities;
 using Checkr.Repositories.Abstract;
 using Checkr.Services.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Checkr.Repositories.Concrete
 {
@@ -8,39 +9,36 @@ namespace Checkr.Repositories.Concrete
     {
         private readonly ApplicationDbContext _context = context;
 
-        public List<Message> GetAllMessages()
+        public async Task<Message?> GetByIdAsync(int id)
         {
-            var messages = _context.Messages
-                .ToList();
-            return messages;
+            return await _context.Messages
+                .Include(m => m.User)
+                .Include(m => m.Board)
+                .FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public Message GetMessageById(int id)
+        public async Task<Message> CreateAsync(Message message)
         {
-            var message = _context.Messages
-                .FirstOrDefault(m => m.Id == id);
+            await _context.Messages.AddAsync(message);
+            await _context.SaveChangesAsync();
             return message;
         }
 
-        public Message AddMessage(Message message)
-        {
-            _context.Messages.Add(message);
-            _context.SaveChanges();
-            return message;
-        }
-
-        public Message UpdateMessage(Message message)
+        public async Task<Message> UpdateAsync(Message message)
         {
             _context.Messages.Update(message);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return message;
         }
 
-        public Message DeleteMessage(int id)
+        public async Task<Message?> DeleteAsync(int id)
         {
-            var message = GetMessageById(id);
-            _context.Messages.Remove(message);
-            _context.SaveChanges();
+            var message = await GetByIdAsync(id);
+            if (message is not null)
+            {
+                _context.Messages.Remove(message);
+                await _context.SaveChangesAsync();
+            }
             return message;
         }
     }

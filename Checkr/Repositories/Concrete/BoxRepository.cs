@@ -9,43 +9,38 @@ namespace Checkr.Repositories.Concrete
     {
         private readonly ApplicationDbContext _context = context;
 
-        public List<Box> GetAllBoxes()
+        public async Task<Box?> GetByIdAsync(int id)
         {
-            var boxes = _context.Boxes
+            return await _context.Boxes
+                .Include(b => b.Board)
                 .Include(b => b.Tags)
                 .Include(b => b.Cards)
-                .ToList();
-            return boxes;
+                    .ThenInclude(c => c.ToDoItems)
+                .FirstOrDefaultAsync(b => b.Id == id);
         }
 
-        public Box GetBoxById(int id)
+        public async Task<Box> CreateAsync(Box box)
         {
-            var box = _context.Boxes
-                .Include(b => b.Tags)
-                .Include(b => b.Cards)
-                .FirstOrDefault(b => b.Id == id);
+            await _context.Boxes.AddAsync(box);
+            await _context.SaveChangesAsync();
             return box;
         }
 
-        public Box AddBox(Box box)
-        {
-            _context.Boxes.Add(box);
-            _context.SaveChanges();
-            return box;
-        }
-
-        public Box UpdateBox(Box box)
+        public async Task<Box> UpdateAsync(Box box)
         {
             _context.Boxes.Update(box);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return box;
         }
 
-        public Box DeleteBox(int id)
+        public async Task<Box?> DeleteAsync(int id)
         {
-            var box = GetBoxById(id);
-            _context.Boxes.Remove(box);
-            _context.SaveChanges();
+            var box = await GetByIdAsync(id);
+            if (box is not null)
+            {
+                _context.Boxes.Remove(box);
+                await _context.SaveChangesAsync();
+            }
             return box;
         }
     }

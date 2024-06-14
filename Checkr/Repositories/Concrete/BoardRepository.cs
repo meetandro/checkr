@@ -10,48 +10,57 @@ namespace Checkr.Repositories.Concrete
     {
         private readonly ApplicationDbContext _context = context;
 
-        public List<Board> GetAllBoardsForUser(string userId)
+        public async Task<IEnumerable<Board>> GetAllBoardsForUserAsync(string userId)
         {
-            var boards = _context.Boards
+            return await _context.Boards
                 .Where(b => b.Users.Any(u => u.Id == userId))
                 .Include(b => b.Users)
                 .Include(b => b.Messages)
+                .Include(b => b.Tags)
+                .Include(b => b.Boxes)
+                    .ThenInclude(b => b.Tags)
                 .Include(b => b.Boxes)
                     .ThenInclude(b => b.Cards)
-                .ToList();
-            return boards;
+                        .ThenInclude(c => c.ToDoItems)
+                .ToListAsync();
         }
 
-        public Board GetBoardById(int id)
+        public async Task<Board?> GetByIdAsync(int id)
         {
-            var board = _context.Boards
+            return await _context.Boards
                 .Include(b => b.Users)
                 .Include(b => b.Messages)
+                .Include(b => b.Tags)
+                .Include(b => b.Boxes)
+                    .ThenInclude(b => b.Tags)
                 .Include(b => b.Boxes)
                     .ThenInclude(b => b.Cards)
-                .FirstOrDefault(b => b.Id == id);
-            return board;
+                        .ThenInclude(c => c.ToDoItems)
+                .FirstOrDefaultAsync(b => b.Id == id);
         }
 
-        public Board AddBoard(Board board)
+        public async Task<Board> CreateAsync(Board board)
         {
-            _context.Boards.Add(board);
-            _context.SaveChanges();
+            await _context.Boards.AddAsync(board);
+            await _context.SaveChangesAsync();
             return board;
         }
 
-        public Board UpdateBoard(Board board)
+        public async Task<Board> UpdateAsync(Board board)
         {
             _context.Boards.Update(board);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return board;
         }
 
-        public Board DeleteBoard(int id)
+        public async Task<Board?> DeleteAsync(int id)
         {
-            var board = GetBoardById(id);
-            _context.Boards.Remove(board);
-            _context.SaveChanges();
+            var board = await GetByIdAsync(id);
+            if (board is not null)
+            {
+                _context.Boards.Remove(board);
+                await _context.SaveChangesAsync();
+            }
             return board;
         }
     }

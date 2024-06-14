@@ -29,8 +29,20 @@ namespace Checkr.Services.Context
 
             modelBuilder.Entity<Box>()
                 .HasMany(b => b.Tags)
-                .WithMany(l => l.Boxes)
-                .UsingEntity(j => j.ToTable("BoxTags"));
+                .WithMany(t => t.Boxes)
+                .UsingEntity<Dictionary<string, object>>(
+                    "BoxTag",
+                    j => j
+                        .HasOne<Tag>()
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Restrict),
+                    j => j
+                        .HasOne<Box>()
+                        .WithMany()
+                        .HasForeignKey("BoxesId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j.ToTable("BoxTags"));
         }
     }
 }

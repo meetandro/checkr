@@ -5,9 +5,11 @@ namespace Checkr.Models
     public class TagDto
     {
         [Required]
-        public string TagName { get; set; } = "";
+        public string Name { get; set; } = "";
 
         [Required]
-        public string TagHex { get; set; } = "";
+        public string Hex { get; set; } = "";
+
+        public int BoardId { get; set; }
     }
 }

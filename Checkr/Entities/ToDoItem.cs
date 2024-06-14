@@ -7,12 +7,12 @@ namespace Checkr.Entities
         public int Id { get; set; }
 
         [Required]
-        public string ToDoItemContent { get; set; } = "";
+        public string Content { get; set; } = string.Empty;
 
         public bool IsCompleted { get; set; }
 
-        // Foreign Keys
-
         public int CardId { get; set; }
+
+        public Card Card { get; set; } = default!;
     }
 }

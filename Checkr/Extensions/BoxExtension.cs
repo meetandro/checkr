@@ -9,7 +9,7 @@ namespace Checkr.Extensions
         {
             return new BoxDto
             {
-                BoxName = box.BoxName,
+                Name = box.Name,
                 BoardId = box.BoardId
             };
         }

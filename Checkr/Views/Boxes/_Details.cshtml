@@ -1,0 +1,55 @@
+﻿@model Box
+
+<div class="col-md-4 mb-4 m-3" style="border-color: purple; border-width: 4px; border-style: solid;">
+    <div class="card shadow-sm bg-dark" style="max-height: 80vh; overflow-y: auto;">
+        <div class="card-body">
+            <h5 class="card-title text-light">@Model.Name</h5>
+            <div class="mb-3">
+                @foreach (var tag in Model.Tags)
+                {
+                    <span class="badge rounded-pill" style="background: @tag.Hex; color: white;">@tag.Name</span>
+                }
+            </div>
+            <div class="d-flex align-items-start">
+                <div class="dropdown me-2">
+                    <button class="btn btn-sm btn-outline-secondary" type="button" id="togglePartialViewButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-plus"></i>
+                    </button>
+                    <div class="p-2 dropdown-menu dropdown-menu-end bg-dark text-light" aria-labelledby="togglePartialViewButton">
+                        @await Html.PartialAsync("/Views/Cards/Create.cshtml", new CardDto() { BoxId = Model.Id })
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-three-dots"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end bg-dark" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <form asp-controller="Tags" asp-action="AddTagToBox" method="get">
+                                <input type="hidden" name="boxId" value="@Model.Id" />
+                                <button type="submit" class="dropdown-item text-light" style="background: transparent; border: none;">
+                                    Modify Tags <i class="bi bi-arrow-right"></i>
+                                </button>
+                            </form>
+                        </li>
+                        <li>
+                            <form asp-controller="Boxes" asp-action="Update" asp-route-id="@Model.Id" method="get">
+                                <button type="submit" class="dropdown-item text-light">Update Box</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form asp-controller="Boxes" asp-action="Delete" asp-route-id="@Model.Id" asp-route-boardId="@Model.BoardId" method="post" onsubmit="return confirm('Confirm?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="dropdown-item text-danger">Delete Box</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            @foreach (var card in Model.Cards)
+            {
+                @await Html.PartialAsync("/Views/Cards/_Details.cshtml", card)
+            }
+        </div>
+    </div>
+</div>

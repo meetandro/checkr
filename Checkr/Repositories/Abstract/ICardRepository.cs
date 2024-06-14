@@ -4,14 +4,16 @@ namespace Checkr.Repositories.Abstract
 {
     public interface ICardRepository
     {
-        List<Card> GetAllCards();
+        Task<IEnumerable<string>> GetCardImageFileNamesByBoardIdAsync(int boardId);
 
-        Card GetCardById(int id);
+        Task<IEnumerable<string>> GetCardImageFileNamesByBoxIdAsync(int boxId);
 
-        Card AddCard(Card card);
+        Task<Card?> GetByIdAsync(int id);
 
-        Card UpdateCard(Card card);
+        Task<Card> CreateAsync(Card card);
 
-        Card DeleteCard(int id);
+        Task<Card> UpdateAsync(Card card);
+
+        Task<Card?> DeleteAsync(int id);
     }
 }

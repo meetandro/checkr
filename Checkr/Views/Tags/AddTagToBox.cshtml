@@ -1,0 +1,53 @@
+﻿@model TagsViewModel
+@{
+}
+
+<h1>Add Tags</h1>
+
+<form asp-controller="Tags" asp-action="Create" method="get">
+    <input type="hidden" value="@Model.BoxId" name="BoxId" />
+    <button type="submit" class="btn btn-outline-success mb-2">Create New</button>
+</form>
+
+@if (Model.BoardTags.Any())
+{
+    <form asp-controller="Tags" asp-action="AddTagToBox" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" value="@Model.BoxId" name="BoxId" />
+        <div class="row">
+            @foreach (var tag in Model.BoardTags)
+            {
+                <div class="col-md-3 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <input type="checkbox" name="SelectedTagsIds" class="form-check-input" id="tag@(tag.Id)" value="@(tag.Id)" @(Model.BoxTags.Contains(tag) ? "checked" : "")>
+                                    <label class="form-check-label ml-2 mb-0" for="tag@(tag.Id)">@(tag.Name)</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer" style="background: @tag.Hex">
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-md-12 mt-3">
+            <button type="submit" class="btn btn-success">Add</button>
+        </div>
+    </form>
+}
+
+<hr />
+
+@foreach (var tag in Model.BoardTags)
+{
+    <form asp-controller="Tags" asp-action="Update" asp-route-id="@(tag.Id)" method="get">
+        <button type="submit" class="btn btn-sm btn-outline-info">Update @(tag.Name)</button>
+    </form>
+    <form asp-controller="Tags" asp-action="Delete" asp-route-id="@(tag.Id)" method="post">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-sm btn-outline-danger">Delete @(tag.Name)</button>
+    </form>
+}

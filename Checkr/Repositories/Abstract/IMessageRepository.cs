@@ -4,14 +4,12 @@ namespace Checkr.Repositories.Abstract
 {
     public interface IMessageRepository
     {
-        List<Message> GetAllMessages();
+        Task<Message?> GetByIdAsync(int id);
 
-        Message GetMessageById(int id);
+        Task<Message> CreateAsync(Message message);
 
-        Message AddMessage(Message message);
+        Task<Message> UpdateAsync(Message message);
 
-        Message UpdateMessage(Message message);
-
-        Message DeleteMessage(int id);
+        Task<Message?> DeleteAsync(int id);
     }
 }

@@ -9,7 +9,7 @@ namespace Checkr.Extensions
         {
             return new BoardDto
             {
-                BoardName = board.BoardName,
+                Name = board.Name,
                 OwnerId = board.OwnerId
             };
         }

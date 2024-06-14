@@ -5,12 +5,12 @@ namespace Checkr.Services.Abstract
 {
     public interface IBoxService
     {
-        Box GetBoxById(int id);
+        Task<Box> GetBoxByIdAsync(int id);
 
-        Box AddBox(BoxDto boxDto);
+        Task<Box> CreateBoxAsync(BoxDto boxDto);
 
-        Box UpdateBox(int boxId, BoxDto boxDto);
+        Task<Box> UpdateBoxAsync(int boxId, BoxDto boxDto);
 
-        Box DeleteBox(int id);
+        Task<Box> DeleteBoxAsync(int id);
     }
 }

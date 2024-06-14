@@ -1,39 +1,42 @@
 ﻿using Checkr.Extensions;
 using Checkr.Models;
 using Checkr.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Checkr.Controllers
 {
+    [Authorize]
     public class BoxesController(IBoxService boxService) : Controller
     {
         private readonly IBoxService _boxService = boxService;
 
-        // asp-route-id || input value
-        public IActionResult AddBoxToBoard(int boardId)
+        [HttpGet]
+        [Authorize(Policy = "IsUserPolicy")]
+        public IActionResult Create(int boardId)
         {
-            ViewData["BoardId"] = boardId;
-
-            return View();
+            return View(new BoxDto { BoardId = boardId });
         }
 
         [HttpPost]
-        public IActionResult AddBoxToBoard(BoxDto boxDto)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(BoxDto boxDto)
         {
             if (!ModelState.IsValid)
             {
                 return View(boxDto);
             }
 
-            _boxService.AddBox(boxDto);
+            await _boxService.CreateBoxAsync(boxDto);
 
-            return RedirectToAction("GetBoardDetails", "Boards", new { id = boxDto.BoardId });
+            return RedirectToAction("Details", "Boards", new { id = boxDto.BoardId });
         }
 
         [HttpGet]
-        public IActionResult UpdateBox(int id)
+        [Authorize(Policy = "IsUserPolicy")]
+        public async Task<IActionResult> Update(int id)
         {
-            var box = _boxService.GetBoxById(id);
+            var box = await _boxService.GetBoxByIdAsync(id);
 
             var boxDto = box.ToBoxDto();
 
@@ -41,26 +44,28 @@ namespace Checkr.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateBox(int id, BoxDto boxDto)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(int id, BoxDto boxDto)
         {
             if (!ModelState.IsValid)
             {
                 return View(boxDto);
             }
 
-            _boxService.UpdateBox(id, boxDto);
+            await _boxService.UpdateBoxAsync(id, boxDto);
 
-            return RedirectToAction("GetBoardDetails", "Boards", new { id = boxDto.BoardId });
+            return RedirectToAction("Details", "Boards", new { id = boxDto.BoardId });
         }
 
         [HttpPost]
-        public IActionResult DeleteBox(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
         {
-            var box = _boxService.GetBoxById(id);
+            var box = await _boxService.GetBoxByIdAsync(id);
 
-            _boxService.DeleteBox(id);
+            await _boxService.DeleteBoxAsync(id);
 
-            return RedirectToAction("GetBoardDetails", "Boards", new { id = box.BoardId });
+            return RedirectToAction("Details", "Boards", new { id = box.BoardId });
         }
     }
 }

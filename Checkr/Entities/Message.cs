@@ -7,14 +7,16 @@ namespace Checkr.Entities
         public int Id { get; set; }
 
         [Required]
-        public string MessageContent { get; set; } = "";
+        public string Content { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; }
 
-        // Foreign Keys
+        public string UserId { get; set; } = string.Empty;
 
-        public string UserId { get; set; }
+        public User User { get; set; } = default!;
 
         public int BoardId { get; set; }
+
+        public Board Board { get; set; } = default!;
     }
 }

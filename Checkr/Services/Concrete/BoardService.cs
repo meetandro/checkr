@@ -1,65 +1,86 @@
 ﻿using Checkr.Entities;
-using Checkr.Extensions;
 using Checkr.Repositories.Abstract;
 using Checkr.Services.Abstract;
 using Checkr.Models;
-using Microsoft.AspNetCore.Identity;
+using Checkr.Exceptions;
 
 namespace Checkr.Services.Concrete
 {
-    public class BoardService(IBoardRepository boardRepository, UserManager<User> userManager) : IBoardService
+    public class BoardService(
+        IBoardRepository boardRepository,
+        ICardRepository cardRepository,
+        IFileService fileService,
+        IUserService userService) : IBoardService
     {
         private readonly IBoardRepository _boardRepository = boardRepository;
-        private readonly UserManager<User> _userManager = userManager;
+        private readonly ICardRepository _cardRepository = cardRepository;
+        private readonly IFileService _fileService = fileService;
+        private readonly IUserService _userService = userService;
 
-        public List<Board> GetAllBoardsForUser(string userId)
+        public async Task<IEnumerable<Board>> GetAllBoardsForUserAsync(string userId)
         {
-            return _boardRepository.GetAllBoardsForUser(userId);
+            return await _boardRepository.GetAllBoardsForUserAsync(userId);
         }
 
-        public Board GetBoardById(int id)
+        public async Task<Board> GetBoardByIdAsync(int id)
         {
-            return _boardRepository.GetBoardById(id);
+            return await _boardRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException();
         }
 
-        public Board AddBoard(BoardDto boardDto)
+        public async Task<Board> CreateBoardAsync(BoardDto boardDto)
         {
-            var board = boardDto.ToBoard();
-            var user = _userManager.FindByIdAsync(boardDto.OwnerId).Result;
+            var board = new Board
+            {
+                Name = boardDto.Name,
+                OwnerId = boardDto.OwnerId
+            };
+
+            var user = await _userService.GetUserByIdAsync(boardDto.OwnerId);
+
             board.Users.Add(user);
-            return _boardRepository.AddBoard(board);
+
+            return await _boardRepository.CreateAsync(board);
         }
 
-        public Board AddUserToBoard(int boardId, string userName)
+        public async Task<Board> UpdateBoardAsync(int boardId, BoardDto boardDto)
         {
-            var board = _boardRepository.GetBoardById(boardId);
-            var user = _userManager.FindByNameAsync(userName).Result;
+            var boardToUpdate = await _boardRepository.GetByIdAsync(boardId) ?? throw new EntityNotFoundException();
+
+            boardToUpdate.Name = boardDto.Name;
+
+            return await _boardRepository.UpdateAsync(boardToUpdate);
+        }
+
+        public async Task<Board> DeleteBoardAsync(int id)
+        {
+            var cardImageFileNames = await _cardRepository.GetCardImageFileNamesByBoardIdAsync(id);
+
+            foreach (var cardImageFileName in cardImageFileNames)
+            {
+                _fileService.DeleteFileInFolder(cardImageFileName, "images");
+            }
+
+            return await _boardRepository.DeleteAsync(id) ?? throw new EntityNotFoundException();
+        }
+
+        public async Task<Board> AddUserToBoardAsync(int boardId, string userId)
+        {
+            var board = await _boardRepository.GetByIdAsync(boardId) ?? throw new EntityNotFoundException();
+
+            var user = await _userService.GetUserByIdAsync(userId);
             board.Users.Add(user);
-            _boardRepository.UpdateBoard(board);
-            return board;
+
+            return await _boardRepository.UpdateAsync(board);
         }
 
-        public Board RemoveUserFromBoard(int boardId, string userId)
+        public async Task<Board> RemoveUserFromBoardAsync(int boardId, string userId)
         {
-            var board = _boardRepository.GetBoardById(boardId);
-            var user = _userManager.FindByIdAsync(userId).Result;
+            var board = await _boardRepository.GetByIdAsync(boardId) ?? throw new EntityNotFoundException();
+
+            var user = await _userService.GetUserByIdAsync(userId);
             board.Users.Remove(user);
-            _boardRepository.UpdateBoard(board);
-            return board;
-        }
-
-        public Board UpdateBoard(int boardId, BoardDto boardDto)
-        {
-            var boardToUpdate = _boardRepository.GetBoardById(boardId);
-
-            boardToUpdate.BoardName = boardDto.BoardName;
-
-            return _boardRepository.UpdateBoard(boardToUpdate);
-        }
-
-        public Board DeleteBoard(int id)
-        {
-            return _boardRepository.DeleteBoard(id);
+            
+            return await _boardRepository.UpdateAsync(board);
         }
     }
 }

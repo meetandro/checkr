@@ -7,16 +7,14 @@ namespace Checkr.Entities
         public int Id { get; set; }
 
         [Required]
-        public string BoxName { get; set; } = "";
-
-        // Foreign Keys
+        public string Name { get; set; } = string.Empty;
 
         public int BoardId { get; set; }
 
-        // Collections
+        public Board Board { get; set; } = default!;
 
-        public List<Tag> Tags { get; set; } = [];
+        public ICollection<Tag> Tags { get; set; } = [];
 
-        public List<Card> Cards { get; set; } = [];
+        public ICollection<Card> Cards { get; set; } = [];
     }
 }

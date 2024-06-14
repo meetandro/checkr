@@ -1,30 +1,48 @@
 ﻿using Checkr.Entities;
+using Checkr.Exceptions;
+using Checkr.Models;
 using Checkr.Repositories.Abstract;
 using Checkr.Services.Abstract;
 
 namespace Checkr.Services.Concrete
 {
-    public class ToDoItemService(IToDoItemRepository toDoItemRepository) : IToDoItemService
+    public class ToDoItemService(
+        IToDoItemRepository toDoItemRepository,
+        ICardRepository cardRepository) : IToDoItemService
     {
         private readonly IToDoItemRepository _toDoItemRepository = toDoItemRepository;
+        private readonly ICardRepository _cardRepository = cardRepository;
 
-        public ToDoItem AddToDoItem(ToDoItem toDoItem)
+        public async Task<ToDoItem> GetToDoItemByIdAsync(int id)
         {
-            return _toDoItemRepository.AddToDoItem(toDoItem);
+            return await _toDoItemRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException();
         }
 
-        public ToDoItem UpdateToDoItem(int toDoItemId, ToDoItem toDoItem)
+        public async Task<ToDoItem> CreateToDoItemAsync(ToDoItemDto toDoItemDto)
         {
-            var toDoItemToUpdate = _toDoItemRepository.GetToDoItemById(toDoItemId);
+            var toDoItem = new ToDoItem
+            {
+                Content = toDoItemDto.Content,
+                IsCompleted = toDoItemDto.IsCompleted,
+                Card = await _cardRepository.GetByIdAsync(toDoItemDto.CardId) ?? throw new EntityNotFoundException()
+            };
 
-            toDoItemToUpdate = toDoItem;
-
-            return _toDoItemRepository.UpdateToDoItem(toDoItemToUpdate);
+            return await _toDoItemRepository.CreateAsync(toDoItem);
         }
 
-        public ToDoItem DeleteToDoItem(int toDoItemId)
+        public async Task<ToDoItem> UpdateToDoItemAsync(int toDoItemId, ToDoItemDto toDoItemDto)
         {
-            return _toDoItemRepository.DeleteToDoItem(toDoItemId);
+            var toDoItem = await _toDoItemRepository.GetByIdAsync(toDoItemId) ?? throw new EntityNotFoundException();
+
+            toDoItem.Content = toDoItemDto.Content;
+            toDoItem.IsCompleted = toDoItemDto.IsCompleted;
+
+            return await _toDoItemRepository.UpdateAsync(toDoItem);
+        }
+
+        public async Task<ToDoItem> DeleteToDoItemAsync(int toDoItemId)
+        {
+            return await _toDoItemRepository.DeleteAsync(toDoItemId) ?? throw new EntityNotFoundException();
         }
     }
 }

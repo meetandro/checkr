@@ -6,15 +6,15 @@ namespace Checkr.Services.Concrete
     {
         private readonly IWebHostEnvironment _environment = environment;
 
-        public string SaveFileInFolder(IFormFile file, string folder)
+        public async Task<string> SaveFileInFolderAsync(IFormFile file, string folder)
         {
             string fileExtension = Path.GetExtension(file.FileName);
-            string fileName = $"{DateTime.Now:yyyyMMddHHmmssfff}{fileExtension}";
+            string fileName = $"Checkr-{DateTime.UtcNow:yyyyMMddHHmmssfff}{fileExtension}";
 
             string fullPath = Path.Combine(_environment.WebRootPath, folder, fileName);
             using (var stream = File.Create(fullPath))
             {
-                file.CopyTo(stream);
+                await file.CopyToAsync(stream);
             }
 
             return fileName;

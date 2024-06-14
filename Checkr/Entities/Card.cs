@@ -7,22 +7,20 @@ namespace Checkr.Entities
         public int Id { get; set; }
 
         [Required]
-        public string CardName { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
 
-        public string CardContent { get; set; } = "";
+        public string Content { get; set; } = string.Empty;
 
-        public string CardImageFileName { get; set; } = "";
+        public string ImageFileName { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; }
 
         public DateTime DueDate { get; set; }
 
-        // Foreign Keys
-
         public int BoxId { get; set; }
 
-        // Collections
+        public Box Box { get; set; } = default!;
 
-        public List<ToDoItem> ToDoItems { get; set; } = [];
+        public ICollection<ToDoItem> ToDoItems { get; set; } = [];
     }
 }

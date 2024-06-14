@@ -1,0 +1,17 @@
+﻿@model BoardDto
+@{
+}
+
+<h1>Update Board</h1>
+
+<form asp-controller="Boards" asp-action="Update" method="post">
+    <div class="form-group">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="OwnerId" />
+        <label asp-for="Name">Board Name</label>
+        <input value="@Model.Name" asp-for="Name" class="form-control">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <hr>
+    <button type="submit" class="btn btn-outline-success">Update Board</button>
+</form>

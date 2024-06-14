@@ -4,14 +4,14 @@ namespace Checkr.Repositories.Abstract
 {
     public interface IBoardRepository
     {
-        List<Board> GetAllBoardsForUser(string userId);
+        Task<IEnumerable<Board>> GetAllBoardsForUserAsync(string userId);
 
-        Board GetBoardById(int id);
+        Task<Board?> GetByIdAsync(int id);
 
-        Board AddBoard(Board board);
+        Task<Board> CreateAsync(Board board);
 
-        Board UpdateBoard(Board board);
+        Task<Board> UpdateAsync(Board board);
 
-        Board DeleteBoard(int id);
+        Task<Board?> DeleteAsync(int id);
     }
 }

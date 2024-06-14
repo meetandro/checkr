@@ -1,13 +1,16 @@
 ﻿using Checkr.Entities;
+using Checkr.Models;
 
 namespace Checkr.Services.Abstract
 {
     public interface IToDoItemService
     {
-        ToDoItem AddToDoItem(ToDoItem toDoItem);
+        Task<ToDoItem> GetToDoItemByIdAsync(int id);
 
-        ToDoItem UpdateToDoItem(int toDoItemId, ToDoItem toDoItem);
+        Task<ToDoItem> CreateToDoItemAsync(ToDoItemDto toDoItemDto);
 
-        ToDoItem DeleteToDoItem(int toDoItemId);
+        Task<ToDoItem> UpdateToDoItemAsync(int toDoItemId, ToDoItemDto toDoItemDto);
+
+        Task<ToDoItem> DeleteToDoItemAsync(int toDoItemId);
     }
 }

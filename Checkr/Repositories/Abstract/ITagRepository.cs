@@ -4,14 +4,16 @@ namespace Checkr.Repositories.Abstract
 {
     public interface ITagRepository
     {
-        List<Tag> GetAllTags();
+        Task<IEnumerable<Tag>> GetAllTagsForBoardAsync(int boardId);
 
-        Tag GetTagById(int id);
+        Task<IEnumerable<Tag>> GetByIdsAsync(ICollection<int> ids);
 
-        Tag AddTag(Tag tag);
+        Task<Tag?> GetByIdAsync(int id);
 
-        Tag UpdateTag(Tag label);
+        Task<Tag> CreateAsync(Tag tag);
 
-        Tag DeleteTag(int id);
+        Task<Tag> UpdateAsync(Tag tag);
+
+        Task<Tag?> DeleteAsync(int id);
     }
 }

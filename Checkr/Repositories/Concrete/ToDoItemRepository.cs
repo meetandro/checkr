@@ -1,6 +1,7 @@
 ﻿using Checkr.Entities;
 using Checkr.Repositories.Abstract;
 using Checkr.Services.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Checkr.Repositories.Concrete
 {
@@ -8,39 +9,36 @@ namespace Checkr.Repositories.Concrete
     {
         private readonly ApplicationDbContext _context = context;
 
-        public List<ToDoItem> GetAllToDoItems()
+        public async Task<ToDoItem?> GetByIdAsync(int id)
         {
-            var toDoItems = _context.ToDoItems
-                .ToList();
-            return toDoItems;
+            return await _context.ToDoItems
+                .Include(t => t.Card)
+                    .ThenInclude(c => c.Box)
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public ToDoItem GetToDoItemById(int id)
+        public async Task<ToDoItem> CreateAsync(ToDoItem toDoItem)
         {
-            var toDoItem = _context.ToDoItems
-                .FirstOrDefault(t => t.Id == id);
+            await _context.ToDoItems.AddAsync(toDoItem);
+            await _context.SaveChangesAsync();
             return toDoItem;
         }
 
-        public ToDoItem AddToDoItem(ToDoItem toDoItem)
-        {
-            _context.ToDoItems.Add(toDoItem);
-            _context.SaveChanges();
-            return toDoItem;
-        }
-
-        public ToDoItem UpdateToDoItem(ToDoItem toDoItem)
+        public async Task<ToDoItem> UpdateAsync(ToDoItem toDoItem)
         {
             _context.ToDoItems.Update(toDoItem);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return toDoItem;
         }
 
-        public ToDoItem DeleteToDoItem(int id)
+        public async Task<ToDoItem?> DeleteAsync(int id)
         {
-            var toDoItem = GetToDoItemById(id);
-            _context.ToDoItems.Remove(toDoItem);
-            _context.SaveChanges();
+            var toDoItem = await GetByIdAsync(id);
+            if (toDoItem is not null)
+            {
+                _context.ToDoItems.Remove(toDoItem);
+                await _context.SaveChangesAsync();
+            }
             return toDoItem;
         }
     }

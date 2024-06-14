@@ -9,41 +9,52 @@ namespace Checkr.Repositories.Concrete
     {
         private readonly ApplicationDbContext _context = context;
 
-        public List<Card> GetAllCards()
+        public async Task<IEnumerable<string>> GetCardImageFileNamesByBoardIdAsync(int boardId)
         {
-            var cards = _context.Cards
-                .Include(c => c.ToDoItems)
-                .ToList();
-            return cards;
+            return await _context.Cards
+                .Where(c => c.Box.BoardId == boardId && !string.IsNullOrEmpty(c.ImageFileName))
+                .Select(c => c.ImageFileName)
+                .ToListAsync();
         }
 
-        public Card GetCardById(int id)
+        public async Task<IEnumerable<string>> GetCardImageFileNamesByBoxIdAsync(int boxId)
         {
-            var card = _context.Cards
+            return await _context.Cards
+                .Where(c => c.BoxId == boxId && !string.IsNullOrEmpty(c.ImageFileName))
+                .Select(c => c.ImageFileName)
+                .ToListAsync();
+        }
+
+        public async Task<Card?> GetByIdAsync(int id)
+        {
+            return await _context.Cards
+                .Include(b => b.Box)
                 .Include(c => c.ToDoItems)
-                .FirstOrDefault(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<Card> CreateAsync(Card card)
+        {
+            await _context.Cards.AddAsync(card);
+            await _context.SaveChangesAsync();
             return card;
         }
 
-        public Card AddCard(Card card)
-        {
-            _context.Cards.Add(card);
-            _context.SaveChanges();
-            return card;
-        }
-
-        public Card UpdateCard(Card card)
+        public async Task<Card> UpdateAsync(Card card)
         {
             _context.Cards.Update(card);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return card;
         }
 
-        public Card DeleteCard(int id)
+        public async Task<Card?> DeleteAsync(int id)
         {
-            var card = GetCardById(id);
-            _context.Cards.Remove(card);
-            _context.SaveChanges();
+            var card = await GetByIdAsync(id);
+            if (card is not null)
+            {
+                _context.Cards.Remove(card);
+                await _context.SaveChangesAsync();
+            }
             return card;
         }
     }

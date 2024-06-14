@@ -1,13 +1,16 @@
 ﻿using Checkr.Entities;
+using Checkr.Models;
 
 namespace Checkr.Services.Abstract
 {
     public interface ICardService
     {
-        Card AddCard(Card card);
+        Task<Card> GetCardByIdAsync(int id);
 
-        Card UpdateCard(int cardId, Card card);
+        Task<Card> CreateCardAsync(CardDto cardDto);
 
-        Card DeleteCard(int cardId);
+        Task<Card> UpdateCardAsync(int cardId, CardDto cardDto);
+
+        Task<Card> DeleteCardAsync(int cardId);
     }
 }

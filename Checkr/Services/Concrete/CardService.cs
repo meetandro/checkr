@@ -1,32 +1,79 @@
 ﻿using Checkr.Entities;
+using Checkr.Exceptions;
+using Checkr.Models;
 using Checkr.Repositories.Abstract;
 using Checkr.Services.Abstract;
 
 namespace Checkr.Services.Concrete
 {
-    public class CardService(ICardRepository cardRepository) : ICardService
+    public class CardService(
+        ICardRepository cardRepository,
+        IFileService fileService,
+        IBoxRepository boxRepository) : ICardService
     {
         private readonly ICardRepository _cardRepository = cardRepository;
+        private readonly IFileService _fileService = fileService;
+        private readonly IBoxRepository _boxRepository = boxRepository;
 
-        public Card AddCard(Card card)
+        public async Task<Card> GetCardByIdAsync(int id)
         {
-            return _cardRepository.AddCard(card);
+            return await _cardRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException();
         }
 
-        public Card UpdateCard(int cardId, Card card)
+        public async Task<Card> CreateCardAsync(CardDto cardDto)
         {
-            var cardToUpdate = _cardRepository.GetCardById(cardId);
+            var card = new Card
+            {
+                Content = cardDto.Content,
+                Name = cardDto.Name,
+                CreatedAt = DateTime.UtcNow,
+                DueDate = cardDto.DueDate,
+                Box = await _boxRepository.GetByIdAsync(cardDto.BoxId) ?? throw new EntityNotFoundException()
+        };
 
-            cardToUpdate = card;
+            if (cardDto.ImageFile is not null)
+            {
+                var cardImageFileName = await _fileService.SaveFileInFolderAsync(cardDto.ImageFile, "images");
 
-            return _cardRepository.UpdateCard(cardToUpdate);
+                card.ImageFileName = cardImageFileName;
+            }
+
+            return await _cardRepository.CreateAsync(card);
         }
 
-        public Card DeleteCard(int cardId)
+        public async Task<Card> UpdateCardAsync(int cardId, CardDto cardDto)
         {
-            var card = _cardRepository.GetCardById(cardId);
+            var card = await _cardRepository.GetByIdAsync(cardId) ?? throw new EntityNotFoundException();
 
-            return _cardRepository.DeleteCard(cardId);
+            card.Name = cardDto.Name;
+            card.Content = cardDto.Content;
+            card.DueDate = cardDto.DueDate;
+
+            if (cardDto.ImageFile is not null)
+            {
+                var imageFileName = await _fileService.SaveFileInFolderAsync(cardDto.ImageFile, "images");
+
+                if (!string.IsNullOrEmpty(card.ImageFileName))
+                {
+                    _fileService.DeleteFileInFolder(cardDto.ImageFileName, "images");
+                }
+
+                card.ImageFileName = imageFileName;
+            }
+
+            return await _cardRepository.UpdateAsync(card);
+        }
+
+        public async Task<Card> DeleteCardAsync(int cardId)
+        {
+            var card = await _cardRepository.GetByIdAsync(cardId) ?? throw new EntityNotFoundException();
+
+            if (!string.IsNullOrEmpty(card.ImageFileName))
+            {
+                _fileService.DeleteFileInFolder(card.ImageFileName, "images");
+            }
+
+            return await _cardRepository.DeleteAsync(cardId) ?? throw new EntityNotFoundException();
         }
     }
 }

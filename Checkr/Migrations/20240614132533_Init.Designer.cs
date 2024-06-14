@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Checkr.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240608134154_init")]
-    partial class init
+    [Migration("20240614132533_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,7 +63,7 @@ namespace Checkr.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BoardName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -87,7 +87,7 @@ namespace Checkr.Migrations
                     b.Property<int>("BoardId")
                         .HasColumnType("int");
 
-                    b.Property<string>("BoxName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -109,15 +109,7 @@ namespace Checkr.Migrations
                     b.Property<int>("BoxId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CardContent")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CardImageFileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CardName")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -126,6 +118,14 @@ namespace Checkr.Migrations
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -145,12 +145,12 @@ namespace Checkr.Migrations
                     b.Property<int>("BoardId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MessageContent")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -173,15 +173,20 @@ namespace Checkr.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("TagHex")
+                    b.Property<int>("BoardId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Hex")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TagName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BoardId");
 
                     b.ToTable("Tags");
                 });
@@ -197,12 +202,12 @@ namespace Checkr.Migrations
                     b.Property<int>("CardId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ToDoItemContent")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -447,50 +452,71 @@ namespace Checkr.Migrations
                     b.HasOne("Checkr.Entities.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Checkr.Entities.Box", b =>
                 {
-                    b.HasOne("Checkr.Entities.Board", null)
+                    b.HasOne("Checkr.Entities.Board", "Board")
                         .WithMany("Boxes")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Board");
                 });
 
             modelBuilder.Entity("Checkr.Entities.Card", b =>
                 {
-                    b.HasOne("Checkr.Entities.Box", null)
+                    b.HasOne("Checkr.Entities.Box", "Box")
                         .WithMany("Cards")
                         .HasForeignKey("BoxId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Box");
                 });
 
             modelBuilder.Entity("Checkr.Entities.Message", b =>
                 {
-                    b.HasOne("Checkr.Entities.Board", null)
+                    b.HasOne("Checkr.Entities.Board", "Board")
                         .WithMany("Messages")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Checkr.Entities.User", null)
+                    b.HasOne("Checkr.Entities.User", "User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Board");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Checkr.Entities.Tag", b =>
+                {
+                    b.HasOne("Checkr.Entities.Board", "Board")
+                        .WithMany("Tags")
+                        .HasForeignKey("BoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Board");
                 });
 
             modelBuilder.Entity("Checkr.Entities.ToDoItem", b =>
                 {
-                    b.HasOne("Checkr.Entities.Card", null)
+                    b.HasOne("Checkr.Entities.Card", "Card")
                         .WithMany("ToDoItems")
                         .HasForeignKey("CardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Card");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -549,6 +575,8 @@ namespace Checkr.Migrations
                     b.Navigation("Boxes");
 
                     b.Navigation("Messages");
+
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("Checkr.Entities.Box", b =>

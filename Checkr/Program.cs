@@ -1,9 +1,11 @@
 using Checkr.Entities;
+using Checkr.Policies;
 using Checkr.Repositories.Abstract;
 using Checkr.Repositories.Concrete;
 using Checkr.Services.Abstract;
 using Checkr.Services.Concrete;
 using Checkr.Services.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +23,11 @@ services.AddScoped<IToDoItemRepository, ToDoItemRepository>();
 services.AddScoped<IBoardService, BoardService>();
 services.AddScoped<IBoxService, BoxService>();
 services.AddScoped<ICardService, CardService>();
+services.AddScoped<ITagService, TagService>();
+services.AddScoped<IMessageService, MessageService>();
 services.AddScoped<IToDoItemService, ToDoItemService>();
+
+services.AddScoped<IUserService, UserService>();
 
 services.AddScoped<IFileService, FileService>();
 
@@ -35,6 +41,21 @@ services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAcco
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 services.AddControllersWithViews();
+
+services.AddAuthorizationBuilder()
+    .AddPolicy("IsOwnerPolicy", policy =>
+    {
+        policy.Requirements.Add(new BoardOwnerRequirement());
+    })
+    .AddPolicy("IsUserPolicy", policy =>
+    {
+        policy.Requirements.Add(new BoardUserRequirement());
+    });
+
+services.AddScoped<IAuthorizationHandler, BoardOwnerHandler>();
+services.AddScoped<IAuthorizationHandler, BoardUserHandler>();
+
+services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

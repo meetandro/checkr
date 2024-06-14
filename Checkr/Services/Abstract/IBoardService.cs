@@ -5,18 +5,18 @@ namespace Checkr.Services.Abstract
 {
     public interface IBoardService
     {
-        List<Board> GetAllBoardsForUser(string userId);
+        Task<IEnumerable<Board>> GetAllBoardsForUserAsync(string userId);
 
-        Board GetBoardById(int id);
+        Task<Board> GetBoardByIdAsync(int id);
 
-        Board AddBoard(BoardDto boardDto);
+        Task<Board> CreateBoardAsync(BoardDto boardDto);
 
-        Board AddUserToBoard(int boardId, string userName);
+        Task<Board> UpdateBoardAsync(int boardId, BoardDto boardDto);
 
-        Board RemoveUserFromBoard(int boardId, string userId);
+        Task<Board> DeleteBoardAsync(int id);
 
-        Board UpdateBoard(int boardId, BoardDto boardDto);
+        Task<Board> AddUserToBoardAsync(int boardId, string userId);
 
-        Board DeleteBoard(int id);
+        Task<Board> RemoveUserFromBoardAsync(int boardId, string userId);
     }
 }

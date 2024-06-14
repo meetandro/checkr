@@ -4,14 +4,12 @@ namespace Checkr.Repositories.Abstract
 {
     public interface IToDoItemRepository
     {
-        List<ToDoItem> GetAllToDoItems();
+        Task<ToDoItem?> GetByIdAsync(int id);
 
-        ToDoItem GetToDoItemById(int id);
+        Task<ToDoItem> CreateAsync(ToDoItem toDoItem);
 
-        ToDoItem AddToDoItem(ToDoItem toDoItem);
+        Task<ToDoItem> UpdateAsync(ToDoItem toDoItem);
 
-        ToDoItem UpdateToDoItem(ToDoItem toDoItem);
-
-        ToDoItem DeleteToDoItem(int id);
+        Task<ToDoItem?> DeleteAsync(int id);
     }
 }

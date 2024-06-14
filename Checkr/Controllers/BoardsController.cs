@@ -1,101 +1,63 @@
-﻿using Checkr.Entities;
-using Checkr.Extensions;
+﻿using Checkr.Extensions;
 using Checkr.Services.Abstract;
 using Checkr.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Checkr.Controllers
 {
-    public class BoardsController(IBoardService boardService, UserManager<User> userManager) : Controller
+    [Authorize]
+    public class BoardsController(IBoardService boardService, IUserService userService) : Controller
     {
         private readonly IBoardService _boardService = boardService;
-        private readonly UserManager<User> _userManager = userManager;
+        private readonly IUserService _userService = userService;
 
-        public IActionResult GetAllBoardsForUser()
+        [HttpGet]
+        public async Task<IActionResult> List()
         {
-            var userId = _userManager.GetUserId(User);
-            var boards = _boardService.GetAllBoardsForUser(userId);
+            var userId = await _userService.GetUserIdAsync(User);
+
+            var boards = await _boardService.GetAllBoardsForUserAsync(userId);
+
             return View(boards);
         }
 
-        public IActionResult GetBoardDetails(int id)
+        [HttpGet]
+        [Authorize(Policy = "IsUserPolicy")]
+        public async Task<IActionResult> Details(int id)
         {
-            var board = _boardService.GetBoardById(id);
+            var board = await _boardService.GetBoardByIdAsync(id);
 
             return View(board);
         }
 
-        public IActionResult GetAllUsersForBoard(int id)
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            var board = _boardService.GetBoardById(id);
-            return View(board);
-        }
+            var userId = await _userService.GetUserIdAsync(User);
 
-        public IActionResult AddBoard()
-        {
-            ViewData["OwnerId"] = _userManager.GetUserId(User);
-
-            return View();
+            return View(new BoardDto { OwnerId = userId });
         }
 
         [HttpPost]
-        public IActionResult AddBoard(BoardDto boardDto)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(BoardDto boardDto)
         {
             if (!ModelState.IsValid)
             {
                 return View(boardDto);
             }
 
-            _boardService.AddBoard(boardDto);
+            await _boardService.CreateBoardAsync(boardDto);
 
-            return RedirectToAction(nameof(GetAllBoardsForUser));
+            return RedirectToAction(nameof(List));
         }
 
-        public IActionResult AddUserToBoard(int boardId)
+        [HttpGet]
+        [Authorize(Policy = "IsUserPolicy")]
+        public async Task<IActionResult> Update(int id)
         {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult AddUserToBoard(int id, string userName)
-        {
-            _boardService.AddUserToBoard(id, userName);
-
-            return RedirectToAction(nameof(GetAllBoardsForUser));
-        }
-
-        [HttpPost]
-        public IActionResult RemoveUserFromBoard(int id, string userId)
-        {
-            var board = _boardService.GetBoardById(id);
-            if (board.OwnerId == _userManager.GetUserId(User))
-            {
-                _boardService.RemoveUserFromBoard(id, userId);
-
-                return RedirectToAction(nameof(GetAllUsersForBoard), new { id });
-            }
-            return Forbid();
-        }
-
-        [HttpPost]
-        public IActionResult LeaveBoard(int id)
-        {
-            var board = _boardService.GetBoardById(id);
-            if (board.OwnerId == _userManager.GetUserId(User))
-            {
-                return Forbid();
-            }
-
-            var userId = _userManager.GetUserId(User);
-            _boardService.RemoveUserFromBoard(id, userId);
-
-            return RedirectToAction(nameof(GetAllBoardsForUser));
-        }
-
-        public IActionResult UpdateBoard(int id)
-        {
-            var board = _boardService.GetBoardById(id);
+            var board = await _boardService.GetBoardByIdAsync(id);
 
             var boardDto = board.ToBoardDto();
 
@@ -103,29 +65,84 @@ namespace Checkr.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateBoard(int id, BoardDto boardDto)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(int id, BoardDto boardDto)
         {
             if (!ModelState.IsValid)
             {
                 return View(boardDto);
             }
 
-            _boardService.UpdateBoard(id, boardDto);
+            await _boardService.UpdateBoardAsync(id, boardDto);
 
-            return RedirectToAction(nameof(GetAllBoardsForUser));
+            return RedirectToAction(nameof(List));
         }
 
         [HttpPost]
-        public IActionResult DeleteBoard(int id)
+        [Authorize(Policy = "IsOwnerPolicy")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
         {
-            var board = _boardService.GetBoardById(id);
-            if (board.OwnerId == _userManager.GetUserId(User))
-            {
-                _boardService.DeleteBoard(id);
+            var board = await _boardService.GetBoardByIdAsync(id);
 
-                return RedirectToAction(nameof(GetAllBoardsForUser));
+            await _boardService.DeleteBoardAsync(id);
+
+            return RedirectToAction(nameof(List));
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "IsUserPolicy")]
+        public async Task<IActionResult> Users(int id)
+        {
+            var board = await _boardService.GetBoardByIdAsync(id);
+
+            return View(board);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddUserToBoard(int id, string userName)
+        {
+            var userId = await _userService.GetUserIdByEmailAsync(userName);
+
+            if (userId is null)
+            {
+                return RedirectToAction(nameof(Users), new { id });
             }
-            return Forbid();
+
+            await _boardService.AddUserToBoardAsync(id, userId);
+
+            return RedirectToAction(nameof(Users), new { id });
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "IsOwnerPolicy")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveUserFromBoard(int id, string userId)
+        {
+            var board = await _boardService.GetBoardByIdAsync(id);
+            
+            await _boardService.RemoveUserFromBoardAsync(id, userId);
+
+            return RedirectToAction(nameof(Users), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LeaveBoard(int id)
+        {
+            var board = await _boardService.GetBoardByIdAsync(id);
+
+            var userId = await _userService.GetUserIdAsync(User);
+
+            if (board.OwnerId == userId)
+            {
+                return Forbid();
+            }
+
+            await _boardService.RemoveUserFromBoardAsync(id, userId);
+
+            return RedirectToAction(nameof(List));
         }
     }
 }

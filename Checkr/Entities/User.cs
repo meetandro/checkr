@@ -6,15 +6,13 @@ namespace Checkr.Entities
     public class User : IdentityUser
     {
         [Required]
-        public string FirstName { get; set; } = "";
+        public string FirstName { get; set; } = string.Empty;
 
         [Required]
-        public string LastName { get; set; } = "";
+        public string LastName { get; set; } = string.Empty;
 
-        // Collections
+        public ICollection<Message> Messages { get; set; } = [];
 
-        public List<Message> Messages { get; set; } = [];
-
-        public List<Board> Boards { get; set; } = [];
+        public ICollection<Board> Boards { get; set; } = [];
     }
 }

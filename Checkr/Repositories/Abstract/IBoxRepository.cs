@@ -4,14 +4,12 @@ namespace Checkr.Repositories.Abstract
 {
     public interface IBoxRepository
     {
-        List<Box> GetAllBoxes();
+        Task<Box?> GetByIdAsync(int id);
 
-        Box GetBoxById(int id);
+        Task<Box> CreateAsync(Box box);
 
-        Box AddBox(Box box);
+        Task<Box> UpdateAsync(Box box);
 
-        Box UpdateBox(Box box);
-
-        Box DeleteBox(int id);
+        Task<Box?> DeleteAsync(int id);
     }
 }

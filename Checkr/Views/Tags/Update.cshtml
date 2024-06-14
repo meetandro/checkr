@@ -1,0 +1,21 @@
+﻿@model TagDto
+@{
+}
+
+<h1>Update Tag</h1>
+
+<form asp-controller="Tags" asp-action="Update" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label asp-for="Name">Tag Name</label>
+        <input value="@Model.Name" asp-for="Name" class="form-control">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label" asp-for="Hex">Tag Hex</label>
+        <input type="color" value="@Model.Hex" asp-for="Hex">
+        <span asp-validation-for="Hex" class="text-danger"></span>
+    </div>
+    <hr>
+    <button type="submit" class="btn btn-outline-success">Update Tag</button>
+</form>
