@@ -1,5 +1,6 @@
 ﻿using Checkr.Entities;
 using Checkr.Repositories.Abstract;
+using Checkr.Repositories.Concrete;
 using Checkr.Services.Abstract;
 
 namespace Checkr.Services.Concrete
@@ -8,6 +9,10 @@ namespace Checkr.Services.Concrete
     {
         private readonly ICardRepository _cardRepository = cardRepository;
 
+        public Card GetCardById(int id)
+        {
+            return _cardRepository.GetCardById(id);
+        }
         public Card AddCard(Card card)
         {
             return _cardRepository.AddCard(card);
