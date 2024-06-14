@@ -1,0 +1,25 @@
+﻿@model CardDto
+@{
+}
+
+<h1>Update Card</h1>
+
+<form asp-controller="Cards" asp-action="UpdateCard" method="post">
+    <input type="hidden" asp-for="@Model.BoxId" />
+    <div class="form-group">
+        <label asp-for="CardName">Card Name</label>
+        <input asp-for="@Model.CardName" class="form-control" />
+        <span asp-validation-for="CardName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CardContent">Card Content</label>
+        <textarea asp-for="@Model.CardContent" class="form-control"></textarea>
+        <span asp-validation-for="CardContent" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DueDate">Due Date</label>
+        <input type="date" asp-for="@Model.DueDate" class="form-control" />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Card</button>
+</form>
