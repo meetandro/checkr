@@ -5,11 +5,12 @@ namespace Checkr.Models
     public class CardDto
     {
         [Required]
-        public string Name { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
 
-        public string Content { get; set; } = "";
+        [Required]
+        public string Content { get; set; } = string.Empty;
 
-        public string ImageFileName { get; set; } = "";
+        public string ImageFileName { get; set; } = string.Empty;
 
         public IFormFile? ImageFile { get; set; }
 

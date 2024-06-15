@@ -83,9 +83,7 @@ namespace Checkr.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var board = await _boardService.GetBoardByIdAsync(id);
-
-            await _boardService.DeleteBoardAsync(id);
+            var board = await _boardService.DeleteBoardAsync(id);
 
             return RedirectToAction(nameof(List));
         }
@@ -101,9 +99,9 @@ namespace Checkr.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUserToBoard(int id, string userName)
+        public async Task<IActionResult> AddUserToBoard(int id, string email)
         {
-            var userId = await _userService.GetUserIdByEmailAsync(userName);
+            var userId = await _userService.GetUserIdByEmailAsync(email);
 
             if (userId is null)
             {
@@ -120,8 +118,6 @@ namespace Checkr.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveUserFromBoard(int id, string userId)
         {
-            var board = await _boardService.GetBoardByIdAsync(id);
-            
             await _boardService.RemoveUserFromBoardAsync(id, userId);
 
             return RedirectToAction(nameof(Users), new { id });

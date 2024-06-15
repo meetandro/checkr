@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Checkr.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240614132533_Init")]
+    [Migration("20240615060230_Init")]
     partial class Init
     {
         /// <inheritdoc />

@@ -4,10 +4,9 @@ namespace Checkr.Models
 {
     public class BoardDto
     {
-
         [Required]
-        public string Name { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
 
-        public string OwnerId { get; set; }
+        public string OwnerId { get; set; } = string.Empty;
     }
 }

@@ -27,9 +27,9 @@ namespace Checkr.Controllers
                 return View(boxDto);
             }
 
-            await _boxService.CreateBoxAsync(boxDto);
+            var box = await _boxService.CreateBoxAsync(boxDto);
 
-            return RedirectToAction("Details", "Boards", new { id = boxDto.BoardId });
+            return RedirectToAction("Details", "Boards", new { id = box.BoardId });
         }
 
         [HttpGet]
@@ -52,18 +52,16 @@ namespace Checkr.Controllers
                 return View(boxDto);
             }
 
-            await _boxService.UpdateBoxAsync(id, boxDto);
+            var box = await _boxService.UpdateBoxAsync(id, boxDto);
 
-            return RedirectToAction("Details", "Boards", new { id = boxDto.BoardId });
+            return RedirectToAction("Details", "Boards", new { id = box.BoardId });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var box = await _boxService.GetBoxByIdAsync(id);
-
-            await _boxService.DeleteBoxAsync(id);
+            var box = await _boxService.DeleteBoxAsync(id);
 
             return RedirectToAction("Details", "Boards", new { id = box.BoardId });
         }
