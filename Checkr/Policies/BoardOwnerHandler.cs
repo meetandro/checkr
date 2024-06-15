@@ -11,7 +11,9 @@ namespace Checkr.Policies
         private readonly IBoardService _boardService = boardService;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, BoardOwnerRequirement requirement)
+        protected override async Task HandleRequirementAsync(
+            AuthorizationHandlerContext context,
+            BoardOwnerRequirement requirement)
         {
             if (_httpContextAccessor.HttpContext is null)
             {
@@ -19,6 +21,7 @@ namespace Checkr.Policies
             }
 
             var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             var boardId = int.Parse(_httpContextAccessor.HttpContext.Request.RouteValues["id"]!.ToString()!);
             var board = await _boardService.GetBoardByIdAsync(boardId);
 

@@ -83,7 +83,7 @@ namespace Checkr.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var board = await _boardService.DeleteBoardAsync(id);
+            await _boardService.DeleteBoardAsync(id);
 
             return RedirectToAction(nameof(List));
         }

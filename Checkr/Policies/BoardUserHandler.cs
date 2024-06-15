@@ -1,4 +1,5 @@
-﻿using Checkr.Services.Abstract;
+﻿using Checkr.Entities;
+using Checkr.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
@@ -19,7 +20,9 @@ namespace Checkr.Policies
         private readonly ITagService _tagService = tagService;
         private readonly IToDoItemService _toDoItemService = toDoItemService;
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, BoardUserRequirement requirement)
+        protected override async Task HandleRequirementAsync(
+            AuthorizationHandlerContext context,
+            BoardUserRequirement requirement)
         {
             if (_httpContextAccessor.HttpContext is null)
             {
@@ -27,99 +30,63 @@ namespace Checkr.Policies
             }
 
             var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var controller = _httpContextAccessor.HttpContext.Request.RouteValues["controller"]!.ToString();
 
-            var routeIdAsString = _httpContextAccessor.HttpContext.Request.RouteValues["id"]?.ToString();
+            var controller = _httpContextAccessor.HttpContext.Request.RouteValues["controller"]!.ToString();
+            var idString = _httpContextAccessor.HttpContext.Request.RouteValues["id"]?.ToString();
+
+            bool isBoardUser = false;
 
             try
             {
-                if (routeIdAsString is null)
+                if (idString is null)
                 {
-                    switch (controller)
+                    var query = _httpContextAccessor.HttpContext.Request.Query;
+
+                    isBoardUser = controller switch
                     {
-                        case "Boxes" when _httpContextAccessor.HttpContext.Request.Query.ContainsKey("BoardId") &&
-                        int.TryParse(_httpContextAccessor.HttpContext.Request.Query["BoardId"], out int boardId):
-                            {
-                                var board = await _boardService.GetBoardByIdAsync(boardId);
-                                if (board is not null && board.Users.Any(u => u.Id == userId))
-                                {
-                                    context.Succeed(requirement);
-                                }
-                                break;
-                            }
+                        "Boxes" when query.ContainsKey("BoardId") && int.TryParse(query["BoardId"], out int boardId) =>
+                            await IsUserInBoardAsync(boardId),
 
-                        case "Tags" when _httpContextAccessor.HttpContext.Request.Query.ContainsKey("BoxId") &&
-                        int.TryParse(_httpContextAccessor.HttpContext.Request.Query["BoxId"], out int boxId):
-                            {
-                                var box = await _boxService.GetBoxByIdAsync(boxId);
-                                if (box is not null)
-                                {
-                                    var board = await _boardService.GetBoardByIdAsync(box.BoardId);
-                                    if (board is not null && board.Users.Any(u => u.Id == userId))
-                                    {
-                                        context.Succeed(requirement);
-                                    }
-                                }
-                                break;
-                            }
+                        "Tags" when query.ContainsKey("BoxId") && int.TryParse(query["BoxId"], out int boxId) =>
+                            await _boxService.GetBoxByIdAsync(boxId) is Box box && await IsUserInBoardAsync(box.BoardId),
 
-                        default:
-                            break;
-                    }
+                        _ => false
+                    };
                 }
-                else if (routeIdAsString is not null)
+                else if (idString is not null)
                 {
-                    var id = int.Parse(routeIdAsString);
+                    var id = int.Parse(idString);
 
-                    switch (controller)
+                    isBoardUser = controller switch
                     {
-                        case "Boards":
-                            var board = await _boardService.GetBoardByIdAsync(id);
-                            if (board is not null && board.Users.Any(u => u.Id == userId))
-                            {
-                                context.Succeed(requirement);
-                            }
-                            break;
+                        "Boards" => await IsUserInBoardAsync(id),
 
-                        case "Boxes":
-                            var box = await _boxService.GetBoxByIdAsync(id);
-                            var boardFromBox = await _boardService.GetBoardByIdAsync(box.BoardId);
-                            if (boardFromBox is not null && boardFromBox.Users.Any(u => u.Id == userId))
-                            {
-                                context.Succeed(requirement);
-                            }
-                            break;
+                        "Boxes" => await _boxService.GetBoxByIdAsync(id) is Box box
+                            && await IsUserInBoardAsync(box.BoardId),
 
-                        case "Tags":
-                            var tag = await _tagService.GetTagByIdAsync(id);
-                            var boardFromTag = await _boardService.GetBoardByIdAsync(tag.BoardId);
-                            if (boardFromTag is not null && boardFromTag.Users.Any(u => u.Id == userId))
-                            {
-                                context.Succeed(requirement);
-                            }
-                            break;
+                        "Tags" => await _tagService.GetTagByIdAsync(id) is Tag tag
+                            && await IsUserInBoardAsync(tag.BoardId),
 
-                        case "Cards":
-                            var card = await _cardService.GetCardByIdAsync(id);
-                            var boardFromCard = await _boardService.GetBoardByIdAsync(card.Box.BoardId);
-                            if (boardFromCard is not null && boardFromCard.Users.Any(u => u.Id == userId))
-                            {
-                                context.Succeed(requirement);
-                            }
-                            break;
+                        "Cards" => await _cardService.GetCardByIdAsync(id) is Card card
+                            && await IsUserInBoardAsync(card.Box.BoardId),
 
-                        case "ToDoItems":
-                            var toDoItem = await _toDoItemService.GetToDoItemByIdAsync(id);
-                            var boardFromToDoItem = await _boardService.GetBoardByIdAsync(toDoItem.Card.Box.BoardId);
-                            if (boardFromToDoItem is not null && boardFromToDoItem.Users.Any(u => u.Id == userId))
-                            {
-                                context.Succeed(requirement);
-                            }
-                            break;
+                        "ToDoItems" => await _toDoItemService.GetToDoItemByIdAsync(id) is ToDoItem toDoItem
+                            && await IsUserInBoardAsync(toDoItem.Card.Box.BoardId),
 
-                        default:
-                            break;
-                    }
+                        _ => false
+                    };
+                }
+
+                if (isBoardUser)
+                {
+                    context.Succeed(requirement);
+                }
+
+                async Task<bool> IsUserInBoardAsync(int boardId)
+                {
+                    var board = await _boardService.GetBoardByIdAsync(boardId);
+
+                    return board is not null && board.Users.Any(u => u.Id == userId);
                 }
             }
             catch (Exception)
