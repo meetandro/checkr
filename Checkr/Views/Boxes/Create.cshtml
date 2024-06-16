@@ -2,15 +2,15 @@
 @{
 }
 
-<h1>Add Box</h1>
-
 <form asp-controller="Boxes" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="BoardId" />
     <div class="form-group">
-        @Html.AntiForgeryToken()
-        <input type="hidden" asp-for="BoardId" />
         <label asp-for="Name">Box Name</label>
-        <input asp-for="Name" class="form-control" />
+        <input asp-for="Name" class="form-control bg-dark text-white" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Add Box</button>
+    <div class="d-flex justify-content-center mt-2">
+        <button type="submit" class="btn btn-secondary">Create</button>
+    </div>
 </form>

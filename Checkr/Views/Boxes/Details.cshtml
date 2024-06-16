@@ -1,7 +1,7 @@
 ﻿@model Box
 
-<div class="col-md-4 mb-4 m-3" style="border-color: purple; border-width: 4px; border-style: solid;">
-    <div class="card shadow-sm bg-dark" style="max-height: 80vh; overflow-y: auto;">
+<div class="col-md-4 mb-4 m-3 box-container-custom">
+    <div class="card shadow-sm bg-dark" style="height: 70vh; overflow-y: auto;">
         <div class="card-body">
             <h5 class="card-title text-light">@Model.Name</h5>
             <div class="mb-3">
@@ -34,13 +34,13 @@
                         </li>
                         <li>
                             <form asp-controller="Boxes" asp-action="Update" asp-route-id="@Model.Id" method="get">
-                                <button type="submit" class="dropdown-item text-light">Update Box</button>
+                                <button type="submit" class="dropdown-item text-light bg-dark">Update Box</button>
                             </form>
                         </li>
                         <li>
                             <form asp-controller="Boxes" asp-action="Delete" asp-route-id="@Model.Id" asp-route-boardId="@Model.BoardId" method="post" onsubmit="return confirm('Confirm?');">
                                 @Html.AntiForgeryToken()
-                                <button type="submit" class="dropdown-item text-danger">Delete Box</button>
+                                <button type="submit" class="dropdown-item text-danger bg-dark">Delete Box</button>
                             </form>
                         </li>
                     </ul>
@@ -48,7 +48,7 @@
             </div>
             @foreach (var card in Model.Cards)
             {
-                @await Html.PartialAsync("/Views/Cards/_Details.cshtml", card)
+                @await Html.PartialAsync("/Views/Cards/Details.cshtml", card)
             }
         </div>
     </div>

@@ -3,40 +3,44 @@
     ViewData["BoardId"] = Model.Id;
 }
 
-<h1>All Members for Board: @Model.Name</h1>
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="card p-4 border-0 shadow-lg text-white" style="background-color: #333333; max-width: 400px;">
+        <h1 class="text-center">Members</h1>
 
-@if (Model.Users.Any())
-{
-    <ul>
-        @foreach (var user in Model.Users)
+        @if (Model.Users.Any())
         {
-            if (Model.OwnerId == user.Id)
-            {
-                <li>@user.UserName (Owner)</li>
-            }
-            else
-            {
-                <div class="d-flex">
-                    <li>@user.UserName</li>
-                    <form asp-action="RemoveUserFromBoard" asp-route-id="@Model.Id" asp-route-userId="@user.Id" method="post">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-primary btn-sm">Remove Member</button>
-                    </form>
+            <ul>
+                @foreach (var user in Model.Users)
+                {
+                    if (Model.OwnerId == user.Id)
+                    {
+                        <li>@user.UserName (Owner)</li>
+                    }
+                    else
+                    {
+                        <div class="d-flex">
+                        <li>@user.UserName</li>
+                        <form asp-action="RemoveUserFromBoard" asp-route-id="@Model.Id" asp-route-userId="@user.Id" method="post">
+                                @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-outline-danger btn-sm mx-1">Remove Member</button>
+                        </form>
                 </div>
-            }
+                    }
+                }
+        </ul>
         }
-    </ul>
-}
-else
-{
-    <p>No members found for this board.</p>
-}
+        else
+        {
+        <p>No members found for this board.</p>
+        }
 
-<div class="dropdown me-2">
-    <button class="btn btn-sm btn-outline-secondary" type="button" id="togglePartialViewButton" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-plus"></i>
-    </button>
-    <div class="p-2 dropdown-menu dropdown-menu-end bg-dark text-light" aria-labelledby="togglePartialViewButton">
-        @await Html.PartialAsync("AddUserToBoard", ViewData)
+    <div class="dropdown me-2">
+        <button class="btn btn-sm btn-outline-secondary" type="button" id="togglePartialViewButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-plus"></i>
+        </button>
+        <div class="p-2 dropdown-menu dropdown-menu-end bg-dark text-light" aria-labelledby="togglePartialViewButton">
+                @await Html.PartialAsync("AddUserToBoard", ViewData)
+        </div>
+    </div>
     </div>
 </div>

@@ -2,19 +2,25 @@
 @{
 }
 
-<form asp-controller="ToDoItems" asp-action="Update" method="post">
-    @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="CardId" />
-    <div class="form-group">
-        <label asp-for="Content">ToDoItem Content</label>
-        <input asp-for="Content" class="form-control" />
-        <span asp-validation-for="Content" class="text-danger"></span>
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="card p-4 border-0 shadow-lg text-white" style="background-color: #333333; max-width: 400px;">
+        <form asp-controller="ToDoItems" asp-action="Update" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="CardId" />
+            <div class="form-group">
+                <label asp-for="Content" class="form-label">ToDoItem Content</label>
+                <input asp-for="Content" class="form-control bg-dark text-white" />
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <label asp-for="IsCompleted" class="form-label">Is Completed</label>
+                <input type="checkbox" asp-for="IsCompleted" class="form-check-input bg-dark">
+                <span asp-validation-for="IsCompleted" class="text-danger"></span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-dark">Update ToDoItem</button>
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="IsCompleted">Is Completed</label>
-        <input type="checkbox" asp-for="IsCompleted" class="form-check-input" />
-        <span asp-validation-for="IsCompleted" class="text-danger"></span>
-    </div>
-    <hr>
-    <button type="submit" class="btn btn-primary">Update ToDoItem</button>
-</form>
+</div>

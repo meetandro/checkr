@@ -11,13 +11,6 @@ namespace Checkr.Controllers
     {
         private readonly IBoxService _boxService = boxService;
 
-        [HttpGet]
-        [Authorize(Policy = "IsUserPolicy")]
-        public IActionResult Create(int boardId)
-        {
-            return View(new BoxDto { BoardId = boardId });
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BoxDto boxDto)

@@ -2,16 +2,21 @@
 @{
 }
 
-<h1>Update Box</h1>
-
-<form asp-controller="Boxes" asp-action="Update" method="post">
-    @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="BoardId" value="@Model.BoardId" />
-    <div class="form-group">
-        <label asp-for="Name">Box Name</label>
-        <input value="@Model.Name" asp-for="Name" class="form-control">
-        <span asp-validation-for="Name" class="text-danger"></span>
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="card p-4 border-0 shadow-lg text-white" style="background-color: #333333; max-width: 400px;">
+        <h1 class="text-center">@Model.Name</h1>
+        <form asp-controller="Boxes" asp-action="Update" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="BoardId" />
+            <div class="form-group">
+                <label asp-for="Name" class="form-label">Box Name</label>
+                <input asp-for="Name" class="form-control bg-dark text-white" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-dark">Update Box</button>
+            </div>
+        </form>
     </div>
-    <hr>
-    <button type="submit" class="btn btn-outline-success">Update Box</button>
-</form>
+</div>
