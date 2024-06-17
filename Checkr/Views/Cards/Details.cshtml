@@ -4,20 +4,20 @@
     <div class="card-body" style="background-color: #2b2b2b;">
         @if (Model.DueDate < DateTime.UtcNow)
         {
-            <span class="badge rounded-pill mb-2" style="background: red; color: white;">Overdue</span>
+            <span class="badge rounded-pill mb-2 bg-danger text-white">Overdue</span>
         }
         else if ((Model.DueDate - DateTime.UtcNow).TotalDays > 7)
         {
-            <span class="badge rounded-pill mb-2" style="background: green; color: white;">Due</span>
+            <span class="badge rounded-pill mb-2 bg-success text-white">Due</span>
         }
         else
         {
-            <span class="badge rounded-pill mb-2" style="background: grey; color: white;">Due Soon</span>
+            <span class="badge rounded-pill mb-2 bg-warning text-white">Due Soon</span>
         }
-        <h5 class="card-title" style="color: #61afef; margin-bottom: 1rem;">@Model.Name</h5>
+        <h5 class="card-title card-title-custom">@Model.Name</h5>
         @if (!string.IsNullOrEmpty(Model.ImageFileName))
         {
-            <img width="100" class="mb-2" src="/images/@Model.ImageFileName" style="display: block; margin-bottom: 1rem;">
+            <img width="100" class="mb-2 card-image" src="/images/@Model.ImageFileName">
         }
         <p class="lead">@Model.Content</p>
         <div class="d-flex align-items-start">

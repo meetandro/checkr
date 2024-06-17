@@ -11,12 +11,12 @@
                 <div class="col-md-4 mb-4 m-3 d-flex justify-content-center align-items-center">
                     <div>
                         <div class="card mb-4 shadow-sm bg-dark text-white">
-                            <div class="card-body message-container" style="height: 400px; overflow-y: auto;">
+                            <div class="card-body message-card message-container">
                                 @foreach (var message in Model.Messages.Reverse())
                                 {
                                     <div class="message">
                                         <p>@message.Content (Sent by @message.User.FirstName)</p>
-                                        <p>@message.CreatedAt</p>
+                                        <p>@message.CreatedAt.ToLocalTime()</p>
                                     </div>
                                 }
                             </div>
@@ -41,7 +41,7 @@
                     @await Html.PartialAsync("/Views/Boxes/Details.cshtml", box)
                 }
             }
-            <div class="col-md-4 mb-4 m-3 d-flex justify-content-center align-items-center box-container-custom" style="height: 200px;">
+            <div class="col-md-4 mb-4 m-3 h-200 d-flex justify-content-center align-items-center box-container-custom">
                 <div class="dropdown me-2">
                     <button class="btn btn-sm btn-outline-secondary" type="button" id="togglePartialViewButton" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-plus"></i>New Box

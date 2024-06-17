@@ -1,7 +1,7 @@
 ﻿@model TagsViewModel
 
 <div class="container d-flex justify-content-center align-items-center mt-5 mb-2">
-    <div class="card p-4 border-0 shadow-lg text-white" style="background-color: #333333; max-width: 400px;">
+    <div class="card card-custom p-4 border-0 shadow-lg text-white">
         <form asp-controller="Tags" asp-action="Create" method="get">
             <input type="hidden" value="@Model.BoxId" name="BoxId" />
             <button type="submit" class="btn btn-outline-success">Create New</button>

@@ -16,6 +16,12 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* Elements */
+
+.h-200 {
+    height: 200px;
+}
+
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
@@ -47,6 +53,33 @@ body {
         flex: 0 0 auto;
     }
 
+.card-custom {
+    background-color: #333333;
+    max-width: 400px;
+}
+
+.card-title-custom {
+    color: #61afef;
+    margin-bottom: 1rem;
+}
+
+.card-image {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.box-card {
+    height: 70vh;
+    overflow-y: auto;
+}
+
+.message-card {
+    height: 400px;
+    overflow-y: auto;
+}
+
+/* Scrollbar */
+
 * {
     scrollbar-width: thin;
     scrollbar-color: #322a31 #5f585a;
@@ -65,3 +98,50 @@ body {
         border-radius: 10px;
         border: 3px dotted #ffffff;
     }
+
+/* Layout */
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+.navbar {
+    background-color: #333;
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+}
+
+.navbar-dark .navbar-toggler-icon {
+    background-color: #fff;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}

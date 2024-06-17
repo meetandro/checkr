@@ -1,13 +1,13 @@
 ﻿@model Box
 
 <div class="col-md-4 mb-4 m-3 box-container-custom">
-    <div class="card shadow-sm bg-dark" style="height: 70vh; overflow-y: auto;">
+    <div class="card box-card shadow-sm bg-dark">
         <div class="card-body">
             <h5 class="card-title text-light">@Model.Name</h5>
             <div class="mb-3">
                 @foreach (var tag in Model.Tags)
                 {
-                    <span class="badge rounded-pill" style="background: @tag.Hex; color: white;">@tag.Name</span>
+                    <span class="badge rounded-pill text-white" style="background: @tag.Hex;">@tag.Name</span>
                 }
             </div>
             <div class="d-flex align-items-start">
@@ -27,7 +27,7 @@
                         <li>
                             <form asp-controller="Tags" asp-action="AddTagToBox" method="get">
                                 <input type="hidden" name="boxId" value="@Model.Id" />
-                                <button type="submit" class="dropdown-item text-light" style="background: transparent; border: none;">
+                                <button type="submit" class="dropdown-item bg-transparent text-light">
                                     Modify Tags <i class="bi bi-arrow-right"></i>
                                 </button>
                             </form>
