@@ -11,7 +11,7 @@
 
 ## Database Schema
 
-![CheckrDatabaseSchema](https://github.com/meetandro/Checkr/assets/132354578/c16efd08-e446-4228-a69e-e60933966c94)
+![CheckrDatabaseSchema](https://github.com/meetandro/Checkr/assets/132354578/76297117-b792-4baf-a3fc-13f3a0108b5c)
 
 ## UI
 
