@@ -16,31 +16,37 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* Elements */
-
 .h-200 {
     height: 200px;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.card-custom {
+    background-color: #333;
+    max-width: 400px;
 }
 
-.board-custom {
+.scrollable-custom {
+    height: 70vh;
+    overflow-y: auto;
+}
+
+.bg-purple-custom {
+    border-image: linear-gradient(45deg, #a080ff, #b5a4ff) 1;
+    background-color: #333;
+    box-shadow: rgba(128, 128, 255, 0.4) 0 1px 10px;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.board-container {
     transition: transform 0.2s ease-in-out;
 }
 
-    .board-custom:hover {
+    .board-container:hover {
         transform: scale(1.05);
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
         z-index: 1;
     }
-
-.box-container-custom {
-    border-color: purple;
-    border-width: 4px;
-    border-style: solid;
-}
 
 .box-container {
     display: flex;
@@ -53,27 +59,7 @@ body {
         flex: 0 0 auto;
     }
 
-.card-custom {
-    background-color: #333333;
-    max-width: 400px;
-}
-
-.card-title-custom {
-    color: #61afef;
-    margin-bottom: 1rem;
-}
-
-.card-image {
-    display: block;
-    margin-bottom: 1rem;
-}
-
-.box-card {
-    height: 70vh;
-    overflow-y: auto;
-}
-
-.message-card {
+.message-container {
     height: 400px;
     overflow-y: auto;
 }
@@ -136,12 +122,4 @@ a.navbar-brand {
 
 .box-shadow {
     box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 60px;
 }
