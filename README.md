@@ -17,4 +17,4 @@
 
 | Home | Board |
 |------|------|
-| ![Home](https://github.com/meetandro/Checkr/assets/132354578/49273010-e039-4212-b6ea-85c7208c2727) |
+| ![Home](https://github.com/meetandro/Checkr/assets/132354578/49273010-e039-4212-b6ea-85c7208c2727) | ![Board](https://github.com/meetandro/Checkr/assets/132354578/e0210675-f296-4941-8f08-41036b033862) |
