@@ -58,5 +58,14 @@ namespace Checkr.Controllers
 
             return RedirectToAction("Details", "Boards", new { id = card.Box.BoardId });
         }
+
+        [HttpGet]
+        [Authorize(Policy = "IsUserPolicy")]
+        public async Task<IActionResult> Checklist(int id)
+        {
+            var card = await _cardService.GetCardByIdAsync(id);
+
+            return View(card);
+        }
     }
 }

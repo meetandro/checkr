@@ -1,0 +1,22 @@
+﻿@model Card
+@{
+}
+
+<h1 class="text-center mt-5">@Model.Name</h1>
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="card card-custom p-4 border-0 shadow-lg text-white p-5">
+        <h1 class="text-center">Checklist</h1>
+        @foreach (var toDoItem in Model.ToDoItems)
+        {
+            @await Html.PartialAsync("/Views/ToDoItems/Details.cshtml", toDoItem)
+        }
+        <div class="dropdown me-2">
+            <button class="btn btn-sm btn-outline-secondary" type="button" id="togglePartialViewButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-plus"></i>New ToDoItem
+            </button>
+            <div class="p-2 dropdown-menu dropdown-menu-end bg-dark text-light" aria-labelledby="togglePartialViewButton">
+                @await Html.PartialAsync("/Views/ToDoItems/Create.cshtml", new ToDoItemDto() { CardId = Model.Id })
+            </div>
+        </div>
+    </div>
+</div>

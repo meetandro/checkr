@@ -57,6 +57,8 @@ services.AddScoped<IAuthorizationHandler, BoardUserHandler>();
 
 services.AddHttpContextAccessor();
 
+services.AddRouting(options => options.LowercaseUrls = true);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
