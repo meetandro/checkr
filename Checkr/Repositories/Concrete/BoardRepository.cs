@@ -15,6 +15,10 @@ namespace Checkr.Repositories.Concrete
             return await _context.Boards
                 .Where(b => b.Users.Any(u => u.Id == userId))
                 .Include(b => b.Users)
+                .Include(b => b.Invitations)
+                    .ThenInclude(i => i.Sender)
+                .Include(b => b.Invitations)
+                    .ThenInclude(i => i.Recipient)
                 .Include(b => b.Messages)
                 .Include(b => b.Tags)
                 .Include(b => b.Boxes)
@@ -29,6 +33,10 @@ namespace Checkr.Repositories.Concrete
         {
             return await _context.Boards
                 .Include(b => b.Users)
+                .Include(b => b.Invitations)
+                    .ThenInclude(i => i.Sender)
+                .Include(b => b.Invitations)
+                    .ThenInclude(i => i.Recipient)
                 .Include(b => b.Messages)
                 .Include(b => b.Tags)
                 .Include(b => b.Boxes)

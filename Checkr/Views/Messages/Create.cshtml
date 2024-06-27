@@ -1,0 +1,13 @@
+﻿@model MessageDto
+@{
+}
+
+<form asp-controller="Messages" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="BoardId" />
+    <span asp-validation-for="Content" class="text-danger"></span>
+    <div class="input-group">
+        <input type="text" asp-for="Content" class="form-control bg-dark text-white" />
+        <button type="submit" class="btn btn-secondary">Send Message</button>
+    </div>
+</form>

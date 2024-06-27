@@ -13,6 +13,7 @@ namespace Checkr.Repositories.Concrete
         {
             return await _context.Boxes
                 .Include(b => b.Board)
+                    .ThenInclude(b => b.Tags)
                 .Include(b => b.Tags)
                 .Include(b => b.Cards)
                     .ThenInclude(c => c.ToDoItems)

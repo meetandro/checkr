@@ -35,9 +35,7 @@
                 </button>
                 <ul class="dropdown-menu bg-dark" aria-labelledby="cardActionsDropdown">
                     <li>
-                        <form asp-controller="Cards" asp-action="Update" asp-route-id="@Model.Id" method="get" class="m-0">
-                            <button type="submit" class="dropdown-item text-light bg-dark">Update Card <i class="bi bi-pencil"></i></button>
-                        </form>
+                        <a asp-controller="Cards" asp-action="Update" asp-route-id="@Model.Id" class="dropdown-item text-light bg-dark">Update Card <i class="bi bi-pencil"></i></a>
                     </li>
                     <li>
                         <form asp-controller="Cards" asp-action="Delete" asp-route-id="@Model.Id" asp-route-boxId="@Model.BoxId" method="post" onsubmit="return confirm('Confirm?');">

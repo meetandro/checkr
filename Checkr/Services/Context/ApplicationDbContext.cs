@@ -18,6 +18,8 @@ namespace Checkr.Services.Context
 
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<Invitation> Invitations { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -43,6 +45,18 @@ namespace Checkr.Services.Context
                         .HasForeignKey("BoxesId")
                         .OnDelete(DeleteBehavior.Cascade),
                     j => j.ToTable("BoxTags"));
+
+            modelBuilder.Entity<Invitation>()
+                .HasOne(i => i.Sender)
+                .WithMany(u => u.SentInvitations)
+                .HasForeignKey(i => i.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Invitation>()
+                .HasOne(i => i.Recipient)
+                .WithMany(u => u.ReceivedInvitations)
+                .HasForeignKey(i => i.RecipientId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

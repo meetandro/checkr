@@ -15,7 +15,7 @@ namespace Checkr.Services.Concrete
         private readonly IBoardRepository _boardRepository = boardRepository;
         private readonly IUserService _userService = userService;
 
-        public async Task<Message> SendMessageAsync(MessageDto messageDto)
+        public async Task<Message> CreateMessageAsync(MessageDto messageDto)
         {
             var message = new Message
             {

@@ -9,15 +9,6 @@ namespace Checkr.Repositories.Concrete
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<IEnumerable<Tag>> GetAllTagsForBoardAsync(int boardId)
-        {
-            return await _context.Tags
-                .Where(t => t.BoardId == boardId)
-                .Include(t => t.Board)
-                .Include(t => t.Boxes)
-                .ToListAsync();
-        }
-
         public async Task<IEnumerable<Tag>> GetByIdsAsync(ICollection<int> ids)
         {
             return await _context.Tags

@@ -18,9 +18,7 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-end bg-dark" aria-labelledby="dropdownMenuButton">
                 <li>
-                    <form asp-controller="ToDoItems" asp-action="Update" asp-route-id="@Model.Id" method="get">
-                        <button type="submit" class="dropdown-item text-light bg-dark">Update ToDoItem <i class="bi bi-pencil"></i></button>
-                    </form>
+                    <a asp-controller="ToDoItems" asp-action="Update" asp-route-id="@Model.Id" class="dropdown-item bg-dark text-light">Update ToDoItem <i class="bi bi-pencil"></i></a>
                 </li>
                 <li>
                     <hr class="dropdown-divider border-light">

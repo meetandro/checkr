@@ -7,6 +7,7 @@ using Checkr.Services.Concrete;
 using Checkr.Services.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ services.AddScoped<ICardRepository, CardRepository>();
 services.AddScoped<ITagRepository, TagRepository>();
 services.AddScoped<IMessageRepository, MessageRepository>();
 services.AddScoped<IToDoItemRepository, ToDoItemRepository>();
+services.AddScoped<IInvitationRepository, InvitationRepository>();
 
 services.AddScoped<IBoardService, BoardService>();
 services.AddScoped<IBoxService, BoxService>();
@@ -26,9 +28,9 @@ services.AddScoped<ICardService, CardService>();
 services.AddScoped<ITagService, TagService>();
 services.AddScoped<IMessageService, MessageService>();
 services.AddScoped<IToDoItemService, ToDoItemService>();
+services.AddScoped<IInvitationService, InvitationService>();
 
 services.AddScoped<IUserService, UserService>();
-
 services.AddScoped<IFileService, FileService>();
 
 services.AddDbContext<ApplicationDbContext>(options =>

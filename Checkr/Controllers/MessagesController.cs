@@ -13,13 +13,18 @@ namespace Checkr.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendMessage(MessageDto messageDto)
+        public async Task<IActionResult> Create(MessageDto messageDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(messageDto);
+            }
+
             var userId = await _userService.GetUserIdAsync(User);
 
             messageDto.UserId = userId;
 
-            var message = await _messageService.SendMessageAsync(messageDto);
+            var message = await _messageService.CreateMessageAsync(messageDto);
 
             return RedirectToAction("Details", "Boards", new { id = message.BoardId });
         }

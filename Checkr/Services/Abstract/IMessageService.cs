@@ -5,6 +5,6 @@ namespace Checkr.Services.Abstract
 {
     public interface IMessageService
     {
-        Task<Message> SendMessageAsync(MessageDto messageDto);
+        Task<Message> CreateMessageAsync(MessageDto messageDto);
     }
 }

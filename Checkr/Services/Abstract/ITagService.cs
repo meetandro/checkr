@@ -5,10 +5,6 @@ namespace Checkr.Services.Abstract
 {
     public interface ITagService
     {
-        Task<IEnumerable<Tag>> GetAllTagsForBoardAsync(int boardId);
-
-        Task<Box> AddTagsToBoxAsync(int boxId, ICollection<int> tagsIds);
-
         Task<Tag> GetTagByIdAsync(int id);
 
         Task<Tag> CreateTagAsync(TagDto tagDto);

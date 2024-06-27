@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Checkr.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240615060230_Init")]
+    [Migration("20240627073941_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -132,6 +132,42 @@ namespace Checkr.Migrations
                     b.HasIndex("BoxId");
 
                     b.ToTable("Cards");
+                });
+
+            modelBuilder.Entity("Checkr.Entities.Invitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BoardId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RecipientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BoardId");
+
+                    b.HasIndex("RecipientId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Invitations");
                 });
 
             modelBuilder.Entity("Checkr.Entities.Message", b =>
@@ -478,6 +514,33 @@ namespace Checkr.Migrations
                     b.Navigation("Box");
                 });
 
+            modelBuilder.Entity("Checkr.Entities.Invitation", b =>
+                {
+                    b.HasOne("Checkr.Entities.Board", "Board")
+                        .WithMany("Invitations")
+                        .HasForeignKey("BoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Checkr.Entities.User", "Recipient")
+                        .WithMany("ReceivedInvitations")
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Checkr.Entities.User", "Sender")
+                        .WithMany("SentInvitations")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Board");
+
+                    b.Navigation("Recipient");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("Checkr.Entities.Message", b =>
                 {
                     b.HasOne("Checkr.Entities.Board", "Board")
@@ -574,6 +637,8 @@ namespace Checkr.Migrations
                 {
                     b.Navigation("Boxes");
 
+                    b.Navigation("Invitations");
+
                     b.Navigation("Messages");
 
                     b.Navigation("Tags");
@@ -592,6 +657,10 @@ namespace Checkr.Migrations
             modelBuilder.Entity("Checkr.Entities.User", b =>
                 {
                     b.Navigation("Messages");
+
+                    b.Navigation("ReceivedInvitations");
+
+                    b.Navigation("SentInvitations");
                 });
 #pragma warning restore 612, 618
         }

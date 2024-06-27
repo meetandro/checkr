@@ -42,6 +42,11 @@ namespace Checkr.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var boxToUpdate = await _boxService.GetBoxByIdAsync(id);
+
+                boxDto.BoardTags = boxToUpdate.Board.Tags;
+                boxDto.BoxTags = boxToUpdate.Tags;
+
                 return View(boxDto);
             }
 

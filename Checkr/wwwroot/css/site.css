@@ -30,12 +30,21 @@ body {
     overflow-y: auto;
 }
 
+.bg-dark-custom {
+    background: #333;
+}
+
 .bg-purple-custom {
     border-image: linear-gradient(45deg, #a080ff, #b5a4ff) 1;
     background-color: #333;
     box-shadow: rgba(128, 128, 255, 0.4) 0 1px 10px;
     border-width: 2px;
     border-style: solid;
+}
+
+.invitations-badge {
+    font-size: 8px;
+    left: 8px;
 }
 
 .board-container {

@@ -13,7 +13,7 @@ namespace Checkr.Controllers
         private readonly IUserService _userService = userService;
 
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> Index()
         {
             var userId = await _userService.GetUserIdAsync(User);
 
@@ -50,7 +50,7 @@ namespace Checkr.Controllers
 
             await _boardService.CreateBoardAsync(boardDto);
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -75,7 +75,7 @@ namespace Checkr.Controllers
 
             await _boardService.UpdateBoardAsync(id, boardDto);
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
@@ -85,7 +85,7 @@ namespace Checkr.Controllers
         {
             await _boardService.DeleteBoardAsync(id);
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -95,22 +95,6 @@ namespace Checkr.Controllers
             var board = await _boardService.GetBoardByIdAsync(id);
 
             return View(board);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUserToBoard(int id, string email)
-        {
-            var userId = await _userService.GetUserIdByEmailAsync(email);
-
-            if (userId is null)
-            {
-                return RedirectToAction(nameof(Users), new { id });
-            }
-
-            await _boardService.AddUserToBoardAsync(id, userId);
-
-            return RedirectToAction(nameof(Users), new { id });
         }
 
         [HttpPost]
@@ -138,7 +122,7 @@ namespace Checkr.Controllers
 
             await _boardService.RemoveUserFromBoardAsync(id, userId);
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(Index));
         }
     }
 }

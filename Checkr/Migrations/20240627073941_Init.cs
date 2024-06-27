@@ -193,6 +193,41 @@ namespace Checkr.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Invitations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsAccepted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SenderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RecipientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BoardId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invitations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Invitations_AspNetUsers_RecipientId",
+                        column: x => x.RecipientId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Invitations_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Invitations_Boards_BoardId",
+                        column: x => x.BoardId,
+                        principalTable: "Boards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Messages",
                 columns: table => new
                 {
@@ -389,6 +424,21 @@ namespace Checkr.Migrations
                 column: "BoxId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Invitations_BoardId",
+                table: "Invitations",
+                column: "BoardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invitations_RecipientId",
+                table: "Invitations",
+                column: "RecipientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invitations_SenderId",
+                table: "Invitations",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Messages_BoardId",
                 table: "Messages",
                 column: "BoardId");
@@ -434,6 +484,9 @@ namespace Checkr.Migrations
 
             migrationBuilder.DropTable(
                 name: "BoxTags");
+
+            migrationBuilder.DropTable(
+                name: "Invitations");
 
             migrationBuilder.DropTable(
                 name: "Messages");

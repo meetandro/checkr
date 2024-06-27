@@ -13,6 +13,8 @@ namespace Checkr.Entities
 
         public ICollection<User> Users { get; set; } = [];
 
+        public ICollection<Invitation> Invitations { get; set; } = [];
+
         public ICollection<Message> Messages { get; set; } = [];
 
         public ICollection<Box> Boxes { get; set; } = [];

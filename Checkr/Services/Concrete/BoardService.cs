@@ -1,8 +1,8 @@
 ﻿using Checkr.Entities;
+using Checkr.Exceptions;
 using Checkr.Repositories.Abstract;
 using Checkr.Services.Abstract;
 using Checkr.Models;
-using Checkr.Exceptions;
 
 namespace Checkr.Services.Concrete
 {
@@ -29,13 +29,13 @@ namespace Checkr.Services.Concrete
 
         public async Task<Board> CreateBoardAsync(BoardDto boardDto)
         {
+            var user = await _userService.GetUserByIdAsync(boardDto.OwnerId);
+
             var board = new Board
             {
                 Name = boardDto.Name,
-                OwnerId = boardDto.OwnerId
+                OwnerId = user.Id,
             };
-
-            var user = await _userService.GetUserByIdAsync(boardDto.OwnerId);
 
             board.Users.Add(user);
 
@@ -61,16 +61,6 @@ namespace Checkr.Services.Concrete
             }
 
             return await _boardRepository.DeleteAsync(id) ?? throw new EntityNotFoundException();
-        }
-
-        public async Task<Board> AddUserToBoardAsync(int boardId, string userId)
-        {
-            var board = await _boardRepository.GetByIdAsync(boardId) ?? throw new EntityNotFoundException();
-
-            var user = await _userService.GetUserByIdAsync(userId);
-            board.Users.Add(user);
-
-            return await _boardRepository.UpdateAsync(board);
         }
 
         public async Task<Board> RemoveUserFromBoardAsync(int boardId, string userId)

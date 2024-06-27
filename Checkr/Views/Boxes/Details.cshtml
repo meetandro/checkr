@@ -25,17 +25,7 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end bg-dark" aria-labelledby="dropdownMenuButton">
                         <li>
-                            <form asp-controller="Tags" asp-action="AddTagToBox" method="get">
-                                <input type="hidden" name="boxId" value="@Model.Id" />
-                                <button type="submit" class="dropdown-item bg-transparent text-light">
-                                    Modify Tags <i class="bi bi-arrow-right"></i>
-                                </button>
-                            </form>
-                        </li>
-                        <li>
-                            <form asp-controller="Boxes" asp-action="Update" asp-route-id="@Model.Id" method="get">
-                                <button type="submit" class="dropdown-item text-light bg-dark">Update Box <i class="bi bi-pencil"></i></button>
-                            </form>
+                            <a asp-controller="Boxes" asp-action="Update" asp-route-id="@Model.Id" class="dropdown-item text-light bg-dark">Update Box <i class="bi bi-pencil"></i></a>
                         </li>
                         <li>
                             <form asp-controller="Boxes" asp-action="Delete" asp-route-id="@Model.Id" asp-route-boardId="@Model.BoardId" method="post" onsubmit="return confirm('Confirm?');">

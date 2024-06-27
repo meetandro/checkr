@@ -8,33 +8,10 @@ namespace Checkr.Services.Concrete
 {
     public class TagService(
         ITagRepository tagRepository,
-        IBoardRepository boardRepository,
-        IBoxRepository boxRepository) : ITagService
+        IBoardRepository boardRepository) : ITagService
     {
         private readonly ITagRepository _tagRepository = tagRepository;
         private readonly IBoardRepository _boardRepository = boardRepository;
-        private readonly IBoxRepository _boxRepository = boxRepository;
-
-        public async Task<IEnumerable<Tag>> GetAllTagsForBoardAsync(int boardId)
-        {
-            return await _tagRepository.GetAllTagsForBoardAsync(boardId);
-        }
-
-        public async Task<Box> AddTagsToBoxAsync(int boxId, ICollection<int> tagsIds)
-        {
-            var box = await _boxRepository.GetByIdAsync(boxId) ?? throw new EntityNotFoundException();
-
-            box.Tags.Clear();
-
-            var tags = await _tagRepository.GetByIdsAsync(tagsIds);
-
-            foreach (var tag in tags)
-            {
-                box.Tags.Add(tag);
-            }
-
-            return await _boxRepository.UpdateAsync(box);
-        }
 
         public async Task<Tag> GetTagByIdAsync(int id)
         {

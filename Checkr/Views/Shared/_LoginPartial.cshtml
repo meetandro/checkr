@@ -1,12 +1,36 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Checkr.Services.Abstract
 @using Checkr.Entities
 
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@inject IInvitationService InvitationService
+
+@{
+    var invitationsCount = 0;
+
+    if (SignInManager.IsSignedIn(User))
+    {
+        var userId = UserManager.GetUserId(User);
+        var invitations = await InvitationService.GetAllReceivedInvitationsForUserAsync(userId!);
+        invitationsCount = invitations.Count();
+    }
+}
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Invitations" asp-action="Index">
+                <div class="position-relative">
+                    <i class="bi bi-envelope"></i>
+                    @if (@invitationsCount > 0)
+                    {
+                        <span class="invitations-badge badge bg-danger position-absolute">@invitationsCount</span>
+                    }
+                </div>
+            </a>
+        </li>
         <li class="nav-item dropdown">
             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="bi bi-person"></i>

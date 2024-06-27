@@ -15,8 +15,6 @@ namespace Checkr.Services.Abstract
 
         Task<Board> DeleteBoardAsync(int id);
 
-        Task<Board> AddUserToBoardAsync(int boardId, string userId);
-
         Task<Board> RemoveUserFromBoardAsync(int boardId, string userId);
     }
 }

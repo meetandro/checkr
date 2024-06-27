@@ -11,6 +11,10 @@ namespace Checkr.Entities
         [Required]
         public string LastName { get; set; } = string.Empty;
 
+        public ICollection<Invitation> SentInvitations { get; set; } = [];
+
+        public ICollection<Invitation> ReceivedInvitations { get; set; } = [];
+
         public ICollection<Message> Messages { get; set; } = [];
 
         public ICollection<Board> Boards { get; set; } = [];

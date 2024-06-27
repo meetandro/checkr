@@ -7,19 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Checkr.Controllers
 {
     [Authorize]
-    public class TagsController(ITagService tagService, IBoxService boxService) : Controller
+    public class TagsController(ITagService tagService) : Controller
     {
         private readonly ITagService _tagService = tagService;
-        private readonly IBoxService _boxService = boxService;
-
-        [HttpGet]
-        [Authorize(Policy = "IsUserPolicy")]
-        public async Task<IActionResult> Create(int boxId)
-        {
-            var box = await _boxService.GetBoxByIdAsync(boxId);
-
-            return View(new TagDto { BoardId = box.BoardId });
-        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -67,31 +57,6 @@ namespace Checkr.Controllers
             var tag = await _tagService.DeleteTagAsync(id);
 
             return RedirectToAction("Details", "Boards", new { id = tag.BoardId });
-        }
-
-        [HttpGet]
-        [Authorize(Policy = "IsUserPolicy")]
-        public async Task<IActionResult> AddTagToBox(int boxId)
-        {
-            var box = await _boxService.GetBoxByIdAsync(boxId);
-
-            var tagsViewModel = new TagsViewModel
-            {
-                BoxId = box.Id,
-                BoxTags = box.Tags,
-                BoardTags = await _tagService.GetAllTagsForBoardAsync(box.BoardId)
-            };
-
-            return View(tagsViewModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddTagToBox(TagsViewModel tagsViewModel)
-        {
-            var box = await _tagService.AddTagsToBoxAsync(tagsViewModel.BoxId, tagsViewModel.SelectedTagsIds);
-
-            return RedirectToAction("Details", "Boards", new { id = box.BoardId });
         }
     }
 }

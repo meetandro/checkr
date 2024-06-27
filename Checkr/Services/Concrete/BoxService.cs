@@ -10,11 +10,13 @@ namespace Checkr.Services.Concrete
         IBoxRepository boxRepository,
         IBoardRepository boardRepository,
         ICardRepository cardRepository,
+        ITagRepository tagRepository,
         IFileService fileService) : IBoxService
     {
         private readonly IBoxRepository _boxRepository = boxRepository;
         private readonly IBoardRepository _boardRepository = boardRepository;
         private readonly ICardRepository _cardRepository = cardRepository;
+        private readonly ITagRepository _tagRepository = tagRepository;
         private readonly IFileService _fileService = fileService;
 
         public async Task<Box> GetBoxByIdAsync(int id)
@@ -35,11 +37,20 @@ namespace Checkr.Services.Concrete
 
         public async Task<Box> UpdateBoxAsync(int boxId, BoxDto boxDto)
         {
-            var boxToUpdate = await _boxRepository.GetByIdAsync(boxId) ?? throw new EntityNotFoundException();
+            var box = await _boxRepository.GetByIdAsync(boxId) ?? throw new EntityNotFoundException();
 
-            boxToUpdate.Name = boxDto.Name;
+            box.Name = boxDto.Name;
 
-            return await _boxRepository.UpdateAsync(boxToUpdate);
+            box.Tags.Clear();
+
+            var tags = await _tagRepository.GetByIdsAsync(boxDto.SelectedTagsIds);
+
+            foreach (var tag in tags)
+            {
+                box.Tags.Add(tag);
+            }
+
+            return await _boxRepository.UpdateAsync(box);
         }
 
         public async Task<Box> DeleteBoxAsync(int id)

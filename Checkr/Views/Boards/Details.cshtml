@@ -21,25 +21,15 @@
                                 }
                             </div>
                             <div class="card-footer">
-                                <form asp-controller="Messages" asp-action="SendMessage" method="post">
-                                    @Html.AntiForgeryToken()
-                                    <input type="hidden" name="BoardId" value="@Model.Id" />
-                                    <div class="input-group">
-                                        <input type="text" name="Content" class="form-control bg-dark text-white" required />
-                                        <button type="submit" class="btn btn-secondary">Send Message</button>
-                                    </div>
-                                </form>
+                                @await Html.PartialAsync("/Views/Messages/Create.cshtml", new MessageDto { BoardId = Model.Id })
                             </div>
                         </div>
                     </div>
                 </div>
             }
-            @if (Model.Boxes.Count > 0)
+            @foreach (var box in Model.Boxes)
             {
-                @foreach (var box in Model.Boxes)
-                {
-                    @await Html.PartialAsync("/Views/Boxes/Details.cshtml", box)
-                }
+                @await Html.PartialAsync("/Views/Boxes/Details.cshtml", box)
             }
             <div class="col-md-4 mb-4 m-3 h-200 d-flex justify-content-center align-items-center bg-purple-custom">
                 <div class="dropdown me-2">
