@@ -13,7 +13,7 @@
     {
         var userId = UserManager.GetUserId(User);
         var invitations = await InvitationService.GetAllReceivedInvitationsForUserAsync(userId!);
-        invitationsCount = invitations.Count();
+        invitationsCount = invitations.Count(i => i.Status == Status.Pending);
     }
 }
 

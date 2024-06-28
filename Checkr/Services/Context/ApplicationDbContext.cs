@@ -57,6 +57,10 @@ namespace Checkr.Services.Context
                 .WithMany(u => u.ReceivedInvitations)
                 .HasForeignKey(i => i.RecipientId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Invitation>()
+                .Property(i => i.Status)
+                .HasConversion<int>();
         }
     }
 }

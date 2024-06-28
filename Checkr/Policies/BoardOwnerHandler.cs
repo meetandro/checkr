@@ -22,14 +22,14 @@ namespace Checkr.Policies
 
             var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var boardId = int.Parse(_httpContextAccessor.HttpContext.Request.RouteValues["id"]!.ToString()!);
-            var board = await _boardService.GetBoardByIdAsync(boardId);
+            var boardId = int.Parse(_httpContextAccessor.HttpContext.Request.RouteValues["id"]!
+                .ToString()!);
 
+            var board = await _boardService.GetBoardByIdAsync(boardId);
             if (board is not null && board.OwnerId == userId)
             {
                 context.Succeed(requirement);
             }
         }
     }
-
 }

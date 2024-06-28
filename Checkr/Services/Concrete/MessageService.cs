@@ -22,7 +22,8 @@ namespace Checkr.Services.Concrete
                 Content = messageDto.Content,
                 CreatedAt = DateTime.UtcNow,
                 User = await _userService.GetUserByIdAsync(messageDto.UserId),
-                Board = await _boardRepository.GetByIdAsync(messageDto.BoardId) ?? throw new EntityNotFoundException()
+                Board = await _boardRepository.GetByIdAsync(messageDto.BoardId)
+                ?? throw new EntityNotFoundException()
             };
 
             return await _messageRepository.CreateAsync(message);

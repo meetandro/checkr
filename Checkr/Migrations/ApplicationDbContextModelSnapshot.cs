@@ -145,9 +145,6 @@ namespace Checkr.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsAccepted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("RecipientId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -155,6 +152,9 @@ namespace Checkr.Migrations
                     b.Property<string>("SenderId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

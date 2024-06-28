@@ -24,7 +24,8 @@ namespace Checkr.Services.Concrete
 
         public async Task<Board> GetBoardByIdAsync(int id)
         {
-            return await _boardRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException();
+            return await _boardRepository.GetByIdAsync(id)
+                ?? throw new EntityNotFoundException();
         }
 
         public async Task<Board> CreateBoardAsync(BoardDto boardDto)
@@ -44,7 +45,8 @@ namespace Checkr.Services.Concrete
 
         public async Task<Board> UpdateBoardAsync(int boardId, BoardDto boardDto)
         {
-            var boardToUpdate = await _boardRepository.GetByIdAsync(boardId) ?? throw new EntityNotFoundException();
+            var boardToUpdate = await _boardRepository.GetByIdAsync(boardId)
+                ?? throw new EntityNotFoundException();
 
             boardToUpdate.Name = boardDto.Name;
 
@@ -60,12 +62,14 @@ namespace Checkr.Services.Concrete
                 _fileService.DeleteFileInFolder(cardImageFileName, "images");
             }
 
-            return await _boardRepository.DeleteAsync(id) ?? throw new EntityNotFoundException();
+            return await _boardRepository.DeleteAsync(id)
+                ?? throw new EntityNotFoundException();
         }
 
         public async Task<Board> RemoveUserFromBoardAsync(int boardId, string userId)
         {
-            var board = await _boardRepository.GetByIdAsync(boardId) ?? throw new EntityNotFoundException();
+            var board = await _boardRepository.GetByIdAsync(boardId)
+                ?? throw new EntityNotFoundException();
 
             var user = await _userService.GetUserByIdAsync(userId);
             board.Users.Remove(user);

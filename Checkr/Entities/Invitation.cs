@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        public bool IsAccepted { get; set; }
+        public Status Status { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
@@ -20,4 +20,11 @@
 
         public Board Board { get; set; } = default!;
     }
+}
+
+public enum Status
+{
+    Pending,
+    Declined,
+    Accepted
 }

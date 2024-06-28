@@ -17,7 +17,8 @@ namespace Checkr.Services.Concrete
 
         public async Task<Card> GetCardByIdAsync(int id)
         {
-            return await _cardRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException();
+            return await _cardRepository.GetByIdAsync(id)
+                ?? throw new EntityNotFoundException();
         }
 
         public async Task<Card> CreateCardAsync(CardDto cardDto)
@@ -28,7 +29,8 @@ namespace Checkr.Services.Concrete
                 Name = cardDto.Name,
                 CreatedAt = DateTime.UtcNow,
                 DueDate = cardDto.DueDate,
-                Box = await _boxRepository.GetByIdAsync(cardDto.BoxId) ?? throw new EntityNotFoundException()
+                Box = await _boxRepository.GetByIdAsync(cardDto.BoxId)
+                ?? throw new EntityNotFoundException()
         };
 
             if (cardDto.ImageFile is not null)
@@ -43,7 +45,8 @@ namespace Checkr.Services.Concrete
 
         public async Task<Card> UpdateCardAsync(int cardId, CardDto cardDto)
         {
-            var card = await _cardRepository.GetByIdAsync(cardId) ?? throw new EntityNotFoundException();
+            var card = await _cardRepository.GetByIdAsync(cardId)
+                ?? throw new EntityNotFoundException();
 
             card.Name = cardDto.Name;
             card.Content = cardDto.Content;
@@ -66,14 +69,16 @@ namespace Checkr.Services.Concrete
 
         public async Task<Card> DeleteCardAsync(int cardId)
         {
-            var card = await _cardRepository.GetByIdAsync(cardId) ?? throw new EntityNotFoundException();
+            var card = await _cardRepository.GetByIdAsync(cardId)
+                ?? throw new EntityNotFoundException();
 
             if (!string.IsNullOrEmpty(card.ImageFileName))
             {
                 _fileService.DeleteFileInFolder(card.ImageFileName, "images");
             }
 
-            return await _cardRepository.DeleteAsync(cardId) ?? throw new EntityNotFoundException();
+            return await _cardRepository.DeleteAsync(cardId)
+                ?? throw new EntityNotFoundException();
         }
     }
 }

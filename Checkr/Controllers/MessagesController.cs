@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Checkr.Controllers
 {
     [Authorize]
-    public class MessagesController(IMessageService messageService, IUserService userService) : Controller
+    public class MessagesController(
+        IMessageService messageService,
+        IUserService userService) : Controller
     {
         private readonly IMessageService _messageService = messageService;
         private readonly IUserService _userService = userService;

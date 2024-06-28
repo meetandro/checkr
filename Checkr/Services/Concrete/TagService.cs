@@ -15,12 +15,14 @@ namespace Checkr.Services.Concrete
 
         public async Task<Tag> GetTagByIdAsync(int id)
         {
-            return await _tagRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException();
+            return await _tagRepository.GetByIdAsync(id)
+                ?? throw new EntityNotFoundException();
         }
 
         public async Task<Tag> CreateTagAsync(TagDto tagDto)
         {
-            var board = await _boardRepository.GetByIdAsync(tagDto.BoardId) ?? throw new EntityNotFoundException();
+            var board = await _boardRepository.GetByIdAsync(tagDto.BoardId)
+                ?? throw new EntityNotFoundException();
 
             var tag = new Tag
             {
@@ -36,7 +38,8 @@ namespace Checkr.Services.Concrete
 
         public async Task<Tag> UpdateTagAsync(int id, TagDto tagDto)
         {
-            var tag = await _tagRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException();
+            var tag = await _tagRepository.GetByIdAsync(id)
+                ?? throw new EntityNotFoundException();
 
             tag.Name = tagDto.Name;
             tag.Hex = tagDto.Hex;
@@ -46,7 +49,8 @@ namespace Checkr.Services.Concrete
 
         public async Task<Tag> DeleteTagAsync(int tagId)
         {
-            return await _tagRepository.DeleteAsync(tagId) ?? throw new EntityNotFoundException();
+            return await _tagRepository.DeleteAsync(tagId)
+                ?? throw new EntityNotFoundException();
         }
     }
 }

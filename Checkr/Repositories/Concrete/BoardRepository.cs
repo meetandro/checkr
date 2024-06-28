@@ -3,7 +3,6 @@ using Checkr.Repositories.Abstract;
 using Checkr.Services.Context;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace Checkr.Repositories.Concrete
 {
     public class BoardRepository(ApplicationDbContext context) : IBoardRepository

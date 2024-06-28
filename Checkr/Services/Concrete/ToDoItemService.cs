@@ -15,7 +15,8 @@ namespace Checkr.Services.Concrete
 
         public async Task<ToDoItem> GetToDoItemByIdAsync(int id)
         {
-            return await _toDoItemRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException();
+            return await _toDoItemRepository.GetByIdAsync(id)
+                ?? throw new EntityNotFoundException();
         }
 
         public async Task<ToDoItem> CreateToDoItemAsync(ToDoItemDto toDoItemDto)
@@ -24,7 +25,8 @@ namespace Checkr.Services.Concrete
             {
                 Content = toDoItemDto.Content,
                 IsCompleted = toDoItemDto.IsCompleted,
-                Card = await _cardRepository.GetByIdAsync(toDoItemDto.CardId) ?? throw new EntityNotFoundException()
+                Card = await _cardRepository.GetByIdAsync(toDoItemDto.CardId)
+                ?? throw new EntityNotFoundException()
             };
 
             return await _toDoItemRepository.CreateAsync(toDoItem);
@@ -32,7 +34,8 @@ namespace Checkr.Services.Concrete
 
         public async Task<ToDoItem> UpdateToDoItemAsync(int toDoItemId, ToDoItemDto toDoItemDto)
         {
-            var toDoItem = await _toDoItemRepository.GetByIdAsync(toDoItemId) ?? throw new EntityNotFoundException();
+            var toDoItem = await _toDoItemRepository.GetByIdAsync(toDoItemId)
+                ?? throw new EntityNotFoundException();
 
             toDoItem.Content = toDoItemDto.Content;
             toDoItem.IsCompleted = toDoItemDto.IsCompleted;
@@ -42,7 +45,8 @@ namespace Checkr.Services.Concrete
 
         public async Task<ToDoItem> DeleteToDoItemAsync(int toDoItemId)
         {
-            return await _toDoItemRepository.DeleteAsync(toDoItemId) ?? throw new EntityNotFoundException();
+            return await _toDoItemRepository.DeleteAsync(toDoItemId)
+                ?? throw new EntityNotFoundException();
         }
     }
 }

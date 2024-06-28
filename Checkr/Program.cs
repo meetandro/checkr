@@ -1,4 +1,5 @@
 using Checkr.Entities;
+using Checkr.Middleware;
 using Checkr.Policies;
 using Checkr.Repositories.Abstract;
 using Checkr.Repositories.Concrete;
@@ -7,7 +8,6 @@ using Checkr.Services.Concrete;
 using Checkr.Services.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +35,8 @@ services.AddScoped<IFileService, FileService>();
 
 services.AddDbContext<ApplicationDbContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContext") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContext' not found.");
+    var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContext")
+        ?? throw new InvalidOperationException("Connection string 'ApplicationDbContext' not found.");
     options.UseSqlServer(connectionString);
 });
 
@@ -78,6 +79,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

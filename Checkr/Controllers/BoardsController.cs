@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 namespace Checkr.Controllers
 {
     [Authorize]
-    public class BoardsController(IBoardService boardService, IUserService userService) : Controller
+    public class BoardsController(
+        IBoardService boardService,
+        IUserService userService) : Controller
     {
         private readonly IBoardService _boardService = boardService;
         private readonly IUserService _userService = userService;

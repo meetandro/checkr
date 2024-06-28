@@ -22,13 +22,16 @@ namespace Checkr.Services.Concrete
 
         public async Task<Invitation?> CreateInvitationAsync(InvitationDto invitationDto)
         {
-            var board = await _boardRepository.GetByIdAsync(invitationDto.BoardId) ?? throw new EntityNotFoundException();
+            var board = await _boardRepository.GetByIdAsync(invitationDto.BoardId)
+                ?? throw new EntityNotFoundException();
 
             var sender = await _userService.GetUserByIdAsync(invitationDto.SenderId);
 
             var recipient = await _userService.GetUserByIdAsync(invitationDto.RecipientId);
 
-            if (board.Users.Contains(recipient) || board.Invitations.Any(i => i.RecipientId == recipient.Id))
+            if (board.Users.Contains(recipient) ||
+                board.Invitations.Any(i => i.RecipientId == recipient.Id
+                    && i.Status == Status.Pending))
             {
                 return null;
             }
@@ -53,16 +56,25 @@ namespace Checkr.Services.Concrete
 
         public async Task<Invitation> RespondToInvitationAsync(int invitationId, bool isAccepted)
         {
-            var invitation = await _invitationRepository.GetByIdAsync(invitationId) ?? throw new EntityNotFoundException();
+            var invitation = await _invitationRepository.GetByIdAsync(invitationId)
+                ?? throw new EntityNotFoundException();
 
-            var board = await _boardRepository.GetByIdAsync(invitation.BoardId) ?? throw new EntityNotFoundException();
+            var board = await _boardRepository.GetByIdAsync(invitation.BoardId)
+                ?? throw new EntityNotFoundException();
 
             var recipient = await _userService.GetUserByIdAsync(invitation.RecipientId);
 
-            if (isAccepted)
+            if (invitation.Status == Status.Pending)
             {
-                board.Users.Add(recipient);
-                invitation.IsAccepted = true;
+                if (isAccepted)
+                {
+                    board.Users.Add(recipient);
+                    invitation.Status = Status.Accepted;
+                }
+                else
+                {
+                    invitation.Status = Status.Declined;
+                }
             }
             else
             {

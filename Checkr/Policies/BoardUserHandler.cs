@@ -31,29 +31,16 @@ namespace Checkr.Policies
 
             var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var controller = _httpContextAccessor.HttpContext.Request.RouteValues["controller"]!.ToString();
-            var idString = _httpContextAccessor.HttpContext.Request.RouteValues["id"]?.ToString();
+            var controller = _httpContextAccessor.HttpContext.Request.RouteValues["controller"]!
+                .ToString();
+            var idString = _httpContextAccessor.HttpContext.Request.RouteValues["id"]?
+                .ToString();
 
             bool isBoardUser = false;
 
             try
             {
-                if (idString is null)
-                {
-                    var query = _httpContextAccessor.HttpContext.Request.Query;
-
-                    isBoardUser = controller switch
-                    {
-                        "Boxes" when query.ContainsKey("BoardId") && int.TryParse(query["BoardId"], out int boardId) =>
-                            await IsUserInBoardAsync(boardId),
-
-                        "Tags" when query.ContainsKey("BoxId") && int.TryParse(query["BoxId"], out int boxId) =>
-                            await _boxService.GetBoxByIdAsync(boxId) is Box box && await IsUserInBoardAsync(box.BoardId),
-
-                        _ => false
-                    };
-                }
-                else if (idString is not null)
+                if (idString is not null)
                 {
                     var id = int.Parse(idString);
 

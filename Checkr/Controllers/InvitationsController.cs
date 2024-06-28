@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Checkr.Controllers
 {
     [Authorize]
-    public class InvitationsController(IInvitationService invitationService, IUserService userService) : Controller
+    public class InvitationsController(
+        IInvitationService invitationService,
+        IUserService userService) : Controller
     {
         private readonly IInvitationService _invitationService = invitationService;
         private readonly IUserService _userService = userService;

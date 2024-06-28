@@ -12,14 +12,16 @@ namespace Checkr.Services.Concrete
 
         public async Task<User> GetUserByIdAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id) ?? throw new EntityNotFoundException();
+            var user = await _userManager.FindByIdAsync(id)
+                ?? throw new EntityNotFoundException();
 
             return user;
         }
 
         public async Task<string> GetUserIdAsync(ClaimsPrincipal principal)
         {
-            var user = await _userManager.GetUserAsync(principal) ?? throw new EntityNotFoundException();
+            var user = await _userManager.GetUserAsync(principal)
+                ?? throw new EntityNotFoundException();
 
             var userId = user.Id;
 

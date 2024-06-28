@@ -21,7 +21,8 @@ namespace Checkr.Services.Concrete
 
         public async Task<Box> GetBoxByIdAsync(int id)
         {
-            return await _boxRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException();
+            return await _boxRepository.GetByIdAsync(id)
+                ?? throw new EntityNotFoundException();
         }
 
         public async Task<Box> CreateBoxAsync(BoxDto boxDto)
@@ -29,7 +30,8 @@ namespace Checkr.Services.Concrete
             var box = new Box()
             {
                 Name = boxDto.Name,
-                Board = await _boardRepository.GetByIdAsync(boxDto.BoardId) ?? throw new EntityNotFoundException()
+                Board = await _boardRepository.GetByIdAsync(boxDto.BoardId)
+                ?? throw new EntityNotFoundException()
             };
 
             return await _boxRepository.CreateAsync(box);
@@ -37,7 +39,8 @@ namespace Checkr.Services.Concrete
 
         public async Task<Box> UpdateBoxAsync(int boxId, BoxDto boxDto)
         {
-            var box = await _boxRepository.GetByIdAsync(boxId) ?? throw new EntityNotFoundException();
+            var box = await _boxRepository.GetByIdAsync(boxId)
+                ?? throw new EntityNotFoundException();
 
             box.Name = boxDto.Name;
 
@@ -62,7 +65,8 @@ namespace Checkr.Services.Concrete
                 _fileService.DeleteFileInFolder(cardImageFileName, "images");
             }
 
-            return await _boxRepository.DeleteAsync(id) ?? throw new EntityNotFoundException();
+            return await _boxRepository.DeleteAsync(id)
+                ?? throw new EntityNotFoundException();
         }
     }
 }
