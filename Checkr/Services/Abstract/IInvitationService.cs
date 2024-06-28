@@ -10,5 +10,7 @@ namespace Checkr.Services.Abstract
         Task<Invitation?> CreateInvitationAsync(InvitationDto invitationDto);
 
         Task<Invitation> RespondToInvitationAsync(int invitationId, bool isAccepted);
+
+        Task<Invitation> DeleteInvitationAsync(int invitationId);
     }
 }

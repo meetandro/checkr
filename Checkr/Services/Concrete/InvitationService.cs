@@ -64,26 +64,25 @@ namespace Checkr.Services.Concrete
 
             var recipient = await _userService.GetUserByIdAsync(invitation.RecipientId);
 
-            if (invitation.Status == Status.Pending)
+            if (isAccepted)
             {
-                if (isAccepted)
-                {
-                    board.Users.Add(recipient);
-                    invitation.Status = Status.Accepted;
-                }
-                else
-                {
-                    invitation.Status = Status.Declined;
-                }
+                board.Users.Add(recipient);
+                invitation.Status = Status.Accepted;
             }
             else
             {
-                await _invitationRepository.DeleteAsync(invitationId);
+                invitation.Status = Status.Declined;
             }
 
             await _boardRepository.UpdateAsync(board);
 
             return invitation;
+        }
+
+        public async Task<Invitation> DeleteInvitationAsync(int invitationId)
+        {
+            return await _invitationRepository.DeleteAsync(invitationId)
+                ?? throw new EntityNotFoundException();
         }
     }
 }

@@ -5,11 +5,11 @@ using System.Security.Claims;
 namespace Checkr.Policies
 {
     public class BoardOwnerHandler(
-        IBoardService boardService,
-        IHttpContextAccessor httpContextAccessor) : AuthorizationHandler<BoardOwnerRequirement>
+        IHttpContextAccessor httpContextAccessor,
+        IBoardService boardService) : AuthorizationHandler<BoardOwnerRequirement>
     {
-        private readonly IBoardService _boardService = boardService;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        private readonly IBoardService _boardService = boardService;
 
         protected override async Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
@@ -21,9 +21,17 @@ namespace Checkr.Policies
             }
 
             var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId is null)
+            {
+                return;
+            }
 
-            var boardId = int.Parse(_httpContextAccessor.HttpContext.Request.RouteValues["id"]!
-                .ToString()!);
+            var boardIdString = _httpContextAccessor.HttpContext.Request.RouteValues["id"]?
+                .ToString();
+            if (boardIdString is null || !int.TryParse(boardIdString, out int boardId))
+            {
+                return;
+            }
 
             var board = await _boardService.GetBoardByIdAsync(boardId);
             if (board is not null && board.OwnerId == userId)

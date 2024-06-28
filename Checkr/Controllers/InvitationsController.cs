@@ -61,5 +61,14 @@ namespace Checkr.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _invitationService.DeleteInvitationAsync(id);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
