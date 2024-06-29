@@ -11,10 +11,10 @@
 
 ## Database Schema
 
-![CheckrDatabaseSchema](https://github.com/meetandro/Checkr/assets/132354578/76297117-b792-4baf-a3fc-13f3a0108b5c)
+![CheckrDatabaseSchema](https://github.com/meetandro/Checkr/assets/132354578/bdf04666-b85e-4297-8b9f-7a068755c409)
 
 ## UI
 
 | Home | Board |
 |------|------|
-| ![Home](https://github.com/meetandro/Checkr/assets/132354578/49273010-e039-4212-b6ea-85c7208c2727) | ![Board](https://github.com/meetandro/Checkr/assets/132354578/e0210675-f296-4941-8f08-41036b033862) |
+| ![Home](https://github.com/meetandro/Checkr/assets/132354578/4668ac51-2205-44e7-8ac8-42894753098b) | ![Board](https://github.com/meetandro/Checkr/assets/132354578/fd3a50ff-43f8-4c6b-967d-a4ae74041a7b) |
