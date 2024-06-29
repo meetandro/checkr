@@ -1,3 +1,4 @@
+using Checkr.Data;
 using Checkr.Entities;
 using Checkr.Middleware;
 using Checkr.Policies;
@@ -5,7 +6,6 @@ using Checkr.Repositories.Abstract;
 using Checkr.Repositories.Concrete;
 using Checkr.Services.Abstract;
 using Checkr.Services.Concrete;
-using Checkr.Services.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 

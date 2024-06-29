@@ -5,7 +5,7 @@ namespace Checkr.Services.Abstract
 {
     public interface IToDoItemService
     {
-        Task<ToDoItem> GetToDoItemByIdAsync(int id);
+        Task<ToDoItem> GetToDoItemByIdAsync(int toDoItemId);
 
         Task<ToDoItem> CreateToDoItemAsync(ToDoItemDto toDoItemDto);
 

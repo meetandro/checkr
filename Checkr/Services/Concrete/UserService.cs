@@ -10,9 +10,9 @@ namespace Checkr.Services.Concrete
     {
         private readonly UserManager<User> _userManager = userManager;
 
-        public async Task<User> GetUserByIdAsync(string id)
+        public async Task<User> GetUserByIdAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(id)
+            var user = await _userManager.FindByIdAsync(userId)
                 ?? throw new EntityNotFoundException();
 
             return user;

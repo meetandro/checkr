@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Checkr.Services.Context
+namespace Checkr.Data
 {
     public class ApplicationDbContext(DbContextOptions options) : IdentityDbContext<User>(options)
     {

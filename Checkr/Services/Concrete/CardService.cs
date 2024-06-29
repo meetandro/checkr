@@ -8,16 +8,16 @@ namespace Checkr.Services.Concrete
 {
     public class CardService(
         ICardRepository cardRepository,
-        IFileService fileService,
-        IBoxRepository boxRepository) : ICardService
+        IBoxRepository boxRepository,
+        IFileService fileService) : ICardService
     {
         private readonly ICardRepository _cardRepository = cardRepository;
-        private readonly IFileService _fileService = fileService;
         private readonly IBoxRepository _boxRepository = boxRepository;
+        private readonly IFileService _fileService = fileService;
 
-        public async Task<Card> GetCardByIdAsync(int id)
+        public async Task<Card> GetCardByIdAsync(int cardId)
         {
-            return await _cardRepository.GetByIdAsync(id)
+            return await _cardRepository.GetByIdAsync(cardId)
                 ?? throw new EntityNotFoundException();
         }
 
@@ -31,11 +31,12 @@ namespace Checkr.Services.Concrete
                 DueDate = cardDto.DueDate,
                 Box = await _boxRepository.GetByIdAsync(cardDto.BoxId)
                 ?? throw new EntityNotFoundException()
-        };
+            };
 
-            if (cardDto.ImageFile is not null)
+            var imageFile = cardDto.ImageFile;
+            if (imageFile is not null)
             {
-                var cardImageFileName = await _fileService.SaveFileInFolderAsync(cardDto.ImageFile, "images");
+                var cardImageFileName = await _fileService.SaveFileInFolderAsync(imageFile, "images");
 
                 card.ImageFileName = cardImageFileName;
             }
@@ -52,9 +53,10 @@ namespace Checkr.Services.Concrete
             card.Content = cardDto.Content;
             card.DueDate = cardDto.DueDate;
 
-            if (cardDto.ImageFile is not null)
+            var imageFile = cardDto.ImageFile;
+            if (imageFile is not null)
             {
-                var imageFileName = await _fileService.SaveFileInFolderAsync(cardDto.ImageFile, "images");
+                var imageFileName = await _fileService.SaveFileInFolderAsync(imageFile, "images");
 
                 if (!string.IsNullOrEmpty(card.ImageFileName))
                 {

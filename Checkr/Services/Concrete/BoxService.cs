@@ -9,19 +9,19 @@ namespace Checkr.Services.Concrete
     public class BoxService(
         IBoxRepository boxRepository,
         IBoardRepository boardRepository,
-        ICardRepository cardRepository,
         ITagRepository tagRepository,
+        ICardRepository cardRepository,
         IFileService fileService) : IBoxService
     {
         private readonly IBoxRepository _boxRepository = boxRepository;
         private readonly IBoardRepository _boardRepository = boardRepository;
-        private readonly ICardRepository _cardRepository = cardRepository;
         private readonly ITagRepository _tagRepository = tagRepository;
+        private readonly ICardRepository _cardRepository = cardRepository;
         private readonly IFileService _fileService = fileService;
 
-        public async Task<Box> GetBoxByIdAsync(int id)
+        public async Task<Box> GetBoxByIdAsync(int boxId)
         {
-            return await _boxRepository.GetByIdAsync(id)
+            return await _boxRepository.GetByIdAsync(boxId)
                 ?? throw new EntityNotFoundException();
         }
 
@@ -56,16 +56,16 @@ namespace Checkr.Services.Concrete
             return await _boxRepository.UpdateAsync(box);
         }
 
-        public async Task<Box> DeleteBoxAsync(int id)
+        public async Task<Box> DeleteBoxAsync(int boxId)
         {
-            var cardImageFileNames = await _cardRepository.GetCardImageFileNamesByBoxIdAsync(id);
+            var cardImageFileNames = await _cardRepository.GetCardImageFileNamesByBoxIdAsync(boxId);
 
             foreach (var cardImageFileName in cardImageFileNames)
             {
                 _fileService.DeleteFileInFolder(cardImageFileName, "images");
             }
 
-            return await _boxRepository.DeleteAsync(id)
+            return await _boxRepository.DeleteAsync(boxId)
                 ?? throw new EntityNotFoundException();
         }
     }

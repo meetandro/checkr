@@ -5,7 +5,7 @@ namespace Checkr.Services.Abstract
 {
     public interface ICardService
     {
-        Task<Card> GetCardByIdAsync(int id);
+        Task<Card> GetCardByIdAsync(int cardId);
 
         Task<Card> CreateCardAsync(CardDto cardDto);
 

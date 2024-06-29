@@ -13,9 +13,9 @@ namespace Checkr.Services.Concrete
         private readonly IToDoItemRepository _toDoItemRepository = toDoItemRepository;
         private readonly ICardRepository _cardRepository = cardRepository;
 
-        public async Task<ToDoItem> GetToDoItemByIdAsync(int id)
+        public async Task<ToDoItem> GetToDoItemByIdAsync(int toDoItemId)
         {
-            return await _toDoItemRepository.GetByIdAsync(id)
+            return await _toDoItemRepository.GetByIdAsync(toDoItemId)
                 ?? throw new EntityNotFoundException();
         }
 

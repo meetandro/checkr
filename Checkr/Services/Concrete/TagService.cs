@@ -13,9 +13,9 @@ namespace Checkr.Services.Concrete
         private readonly ITagRepository _tagRepository = tagRepository;
         private readonly IBoardRepository _boardRepository = boardRepository;
 
-        public async Task<Tag> GetTagByIdAsync(int id)
+        public async Task<Tag> GetTagByIdAsync(int tagId)
         {
-            return await _tagRepository.GetByIdAsync(id)
+            return await _tagRepository.GetByIdAsync(tagId)
                 ?? throw new EntityNotFoundException();
         }
 
@@ -36,9 +36,9 @@ namespace Checkr.Services.Concrete
             return await _tagRepository.CreateAsync(tag);
         }
 
-        public async Task<Tag> UpdateTagAsync(int id, TagDto tagDto)
+        public async Task<Tag> UpdateTagAsync(int tagId, TagDto tagDto)
         {
-            var tag = await _tagRepository.GetByIdAsync(id)
+            var tag = await _tagRepository.GetByIdAsync(tagId)
                 ?? throw new EntityNotFoundException();
 
             tag.Name = tagDto.Name;

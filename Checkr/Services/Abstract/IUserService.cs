@@ -5,7 +5,7 @@ namespace Checkr.Services.Abstract
 {
     public interface IUserService
     {
-        Task<User> GetUserByIdAsync(string id);
+        Task<User> GetUserByIdAsync(string userId);
 
         Task<string> GetUserIdAsync(ClaimsPrincipal principal);
 
