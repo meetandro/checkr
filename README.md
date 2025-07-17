@@ -1,6 +1,6 @@
 # Checkr
 
-**A project management application implementing the MVC (Model-View-Controller) architectural design pattern.**
+**Project management application implementing the MVC (Model-View-Controller) architectural design pattern.**
 
 ## Technologies
 
